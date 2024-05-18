@@ -1,21 +1,36 @@
 {
-  "name": "react-electron",
+  "name": "CyberWaifu-v2-desktop",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
+  "homepage": ".",
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fontsource/roboto": "^5.0.13",
+    "@mui/icons-material": "^5.15.18",
+    "@mui/material": "^5.15.18",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.8",
+    "axios-cookiejar-support": "^5.0.2",
+    "electron": "^30.0.6",
+    "electron-cookies": "github:heap/electron-cookies",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-photo-view": "^1.2.4",
+    "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "use-prefers-color-scheme": "^1.1.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-start": "electron ."
   },
   "eslintConfig": {
     "extends": [
