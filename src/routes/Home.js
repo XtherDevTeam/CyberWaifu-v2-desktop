@@ -2,6 +2,8 @@ import React from 'react';
 
 import { usePrefersColorScheme } from 'use-prefers-color-scheme';
 
+import About from '../components/About';
+import ChatroomView from '../components/ChatroomView';
 import EmptyChatView from '../components/EmtryChatView';
 import Message from '../components/Message';
 import icons from '../shared/icons';
@@ -61,7 +63,7 @@ function Home() {
   return (
     <mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
-      <mui.Drawer ref={drawerRef} onLoad={() => { console.log(drawerRef) }} variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
+      <mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
         <mui.Toolbar>
           <mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20 }}>
             CyberWaifu-V2
@@ -83,7 +85,7 @@ function Home() {
               <mui.ListItemText>Home</mui.ListItemText>
             </mui.ListItemButton> */}
             {charList.map((char, index) => (
-              <mui.ListItemButton key={index} selected={selectedIndex.title == char.charName} onClick={() => handleListItemClick('Character', char.charName)}>
+              <mui.ListItemButton key={index} selected={selectedIndex.title == char.charName} onClick={() => setSelectedIndex({ type: 'Character', title: char.charName, ...char })}>
                 <mui.ListItemIcon>
                   <mui.Avatar src={Remote.charAvatar(char.id)} />
                 </mui.ListItemIcon>
@@ -149,8 +151,10 @@ function Home() {
           </mui.Toolbar>
         </mui.AppBar>
         <mui.Toolbar />
-        <mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)`, paddingVertical: 30 }}>
+        <mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
           {selectedIndex.type == 'Home' && <EmptyChatView />}
+          {selectedIndex.type == 'About' && <About />}
+          {selectedIndex.type == 'Character' && <ChatroomView key={selectedIndex.title} {...selectedIndex} />}
         </mui.Paper>
       </mui.Box>
     </mui.Box>
