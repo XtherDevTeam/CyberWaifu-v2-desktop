@@ -17,6 +17,7 @@
     "axios-cookiejar-support": "^5.0.2",
     "electron": "^30.0.6",
     "electron-cookies": "github:heap/electron-cookies",
+    "overlayscrollbars": "^2.8.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-photo-view": "^1.2.4",

@@ -17,6 +17,9 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js')
     }
   })
+  if (process.platform !== 'darwin') {
+    mainWindow.setMenu(null)
+  }
 
   /* 
    * 加载应用-----  electron-quick-start中默认的加载入口

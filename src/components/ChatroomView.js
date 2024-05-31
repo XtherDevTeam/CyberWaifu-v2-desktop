@@ -344,7 +344,7 @@ function ChatroomView({ id, charName }) {
   return (
     <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
-      <mui.Box ref={chatHistoryViewRef} height={messageViewHeight} sx={{ paddingRight: 30 }} overflow={'scroll'}>
+      <mui.Box ref={chatHistoryViewRef} data-overlayscrollbars-initialize height={messageViewHeight} sx={{ paddingRight: 30 }} overflow={'scroll'}>
         <mui.Box ref={dummyLoadingRef} sx={{ display: isInitializing ? 'none' : 'block' }} display={'flex'} width={'100%'}></mui.Box>
         <mui.Box height={'10vh'}></mui.Box>
         <PhotoProvider>
