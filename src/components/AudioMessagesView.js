@@ -26,6 +26,8 @@ function AudioMessagesView({ audioUrl }) {
     // add end listener
     audioRef.current.addEventListener('ended', () => {
       setIsPlaying(false)
+      // reset to start position
+      audioRef.current.currentTime = 0
     })
     return () => {
       // remove audioRef

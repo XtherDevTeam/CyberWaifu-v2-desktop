@@ -8,7 +8,6 @@ function useCookie() {
     app.whenReady().then(() => {
         const filter = { urls: ['https://*/*'] };
         session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
-            console.log('wtf')
             if (details.responseHeaders && details.responseHeaders['Set-Cookie']) {
                 console.log(details.responseHeaders['Set-Cookie'])
                 for (let i = 0; i < details.responseHeaders['Set-Cookie'].length; i++) {

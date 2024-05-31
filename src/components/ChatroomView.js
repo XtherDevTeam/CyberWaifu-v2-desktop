@@ -8,6 +8,7 @@ import {
 } from 'react-photo-view';
 import usePrefersColorScheme from 'use-prefers-color-scheme';
 
+import fs from '../shared/fs';
 import icons from '../shared/icons';
 import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
@@ -60,6 +61,7 @@ function ChatroomView({ id, charName }) {
   const [isInitializing, setIsInitializing] = React.useState(true)
 
   // sending message related
+  const [chatImagesView, setChatImagesView] = React.useState([])
   const keepAliveTimer = React.useRef(null)
   const [isTyping, setIsTyping] = React.useState(false)
   const [pendingMsgChain, setPendingMsgChain] = React.useState([])
@@ -137,6 +139,12 @@ function ChatroomView({ id, charName }) {
       })
     }
   }, [useStickerSet])
+
+  React.useEffect(() => {
+    console.log('triggerred reset pending msg timer by message chain change')
+    addTemporaryMessage(pendingMsgChain)
+    resetPendingMsgTimer()
+  }, [pendingMsgChain])
 
 
   function receiveMessage(response, order = false) {
@@ -228,6 +236,111 @@ function ChatroomView({ id, charName }) {
     setMessageViewHeight(`calc(100% - ${toolbarRef.current?.offsetHeight}px)`)
   })
 
+  function uploadAllAttachment() {
+    return (async () => {
+      for (let i in chatImages.current) {
+        let r = await fs.uploadAsync(Remote.attachmentUploadImage(), chatImages.current[i], { httpMethod: 'POST', uploadType: fs.FileSystemUploadType.MULTIPART })
+        if (r.status == 200) {
+          let data = await r.json()
+          if (data.status) {
+            chatImages.current[i] = data.id
+          } else {
+            throw data.data
+          }
+        } else {
+          throw 'NetworkError'
+        }
+      }
+    })()
+  }
+
+  function clearChatImages() {
+    chatImages.current = []
+    setChatImagesView([])
+  }
+
+  function sendMessageChain(msgChain) {
+    if (chatSession.current === null) {
+      setIsReceivingMessage(true)
+      Remote.chatEstablish(charName, msgChain).then(r => {
+        if (r.data.status) {
+          console.log(r.data)
+          chatSession.current = r.data.session
+          receiveMessage(r.data.response)
+        }
+        setPendingMsgChain([])
+      })
+    } else {
+      setIsReceivingMessage(true)
+      Remote.chatMessage(chatSession.current, msgChain).then(r => {
+        if (r.data.status) {
+          receiveMessage(r.data.response)
+        } else {
+          // setMessageText(`Failed to send message: ${r.data.data}`)
+          // setMessageState(true)
+          setMessageTitle('Failed to send message')
+          setMessageContent(r.data.data)
+          setMessageType('error')
+          setMessageOpen(true)
+        }
+        setPendingMsgChain([])
+      }).catch(r => {
+        // setMessageText(`Failed to send message: NetworkError`)
+        // setMessageState(true)
+        setMessageTitle('Failed to send message')
+        setMessageContent('NetworkError')
+        setMessageType('error')
+        setMessageOpen(true)
+      })
+    }
+  }
+
+  function sendAudio(attachmentId) {
+    setPendingMsgChain([...pendingMsgChain, `audio:${attachmentId}`])
+  }
+
+  function buildMessageChain(text, images) {
+    let msgChain = [...pendingMsgChain] // force copy, otherwise it can't trigger resetPendingMsgTimer
+    if (text.length !== 0) {
+      msgChain.push(text)
+    }
+    images.map(v => { msgChain.push('image:' + v) })
+    clearChatImages()
+    setChatMessageInput('')
+    setPendingMsgChain(msgChain)
+  }
+
+  function discardPendingMessageTimer() {
+    if (pendingSendTimer !== null) {
+      clearTimeout(pendingSendTimer)
+      setPendingSendTimer(null)
+    }
+  }
+
+  function resetPendingMsgTimer() {
+    if (pendingMsgChain.length === 0) {
+      return
+    }
+    let f = () => sendMessageChain(pendingMsgChain)
+    if (pendingSendTimer !== null) {
+      console.log('not null, clearing timeout', pendingSendTimer)
+      clearTimeout(pendingSendTimer)
+    }
+    // if user is recording voice message, do not send message immediately
+    // deprecated: cuz it will discard this timer directly.
+    // if (audioRecordingStatus) {
+    //   console.log('delayed sending message by 1145141919')
+    //   setPendingSendTimer(setTimeout(f, 1145141919))
+    // }
+
+    // if user is typing message, wait for 10 seconds before sending
+    // if (isTyping) {
+    //   setPendingSendTimer(setTimeout(f, 10000))
+    // }
+    // if menu is open, user probably wants to send emotion stickers, so postpone sending message
+    setPendingSendTimer(setTimeout(f, 1000))
+  }
+
   return (
     <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
@@ -285,9 +398,33 @@ function ChatroomView({ id, charName }) {
             <mui.IconButton color='primary' variant='contained' >
               <icons.Attachment />
             </mui.IconButton>
-            <mui.Button variant='contained' startIcon={<icons.Send />} >
+            {!isReceivingMessage && <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
+              uploadAllAttachment().then(() => {
+                buildMessageChain(chatMessageInput, chatImages.current)
+              }).catch(r => {
+                setMessageTitle('Error')
+                setMessageContent(r)
+                setMessageType('error')
+                setMessageOpen(true)
+              })
+              chatImages.current = []
+            }} onFocus={() => {
+              discardPendingMessageTimer()
+              if (chatSession.current) {
+                keepAliveTimer.current = setInterval(() => {
+                  Remote.chatKeepAlive(chatSession.current)
+                }, 5000)
+              }
+            }} onBlur={() => {
+              resetPendingMsgTimer()
+              if (keepAliveTimer.current) {
+                console.log('clearing keepalive timer')
+                clearInterval(keepAliveTimer.current)
+              }
+            }}>
               Send
-            </mui.Button>
+            </mui.Button>}
+            {isReceivingMessage && <mui.Button variant='contained' startIcon={<icons.HourglassTop />} disabled color='secondary'>Waiting...</mui.Button>}
           </mui.Box>
         </mui.Grid>
       </mui.Grid>
