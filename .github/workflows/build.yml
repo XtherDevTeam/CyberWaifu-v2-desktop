@@ -34,7 +34,7 @@ jobs:
     
     - name: Build Electron
       run: |
-        NODE_ENV=production npm run electron-build build
+        npm run electron-build
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2
@@ -64,7 +64,7 @@ jobs:
     
     - name: Build Electron
       run: |
-        NODE_ENV=production npm run electron-build
+        npm run electron-build
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2
@@ -94,7 +94,7 @@ jobs:
     
     - name: Build Electron
       run: |
-        NODE_ENV=production CSC_IDENTITY_AUTO_DISCOVERY=false npm run electron-build
+        CSC_IDENTITY_AUTO_DISCOVERY=false npm run electron-build
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2
