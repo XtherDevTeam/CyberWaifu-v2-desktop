@@ -4,18 +4,12 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import 'overlayscrollbars/overlayscrollbars.css';
-import { 
-  OverlayScrollbars, 
-  ScrollbarsHidingPlugin, 
-  SizeObserverPlugin, 
-  ClickScrollPlugin 
-} from 'overlayscrollbars';
 
 import React from 'react';
 
 import ReactDOM from 'react-dom/client';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from 'react-router-dom';
 import usePrefersColorScheme from 'use-prefers-color-scheme';
@@ -27,7 +21,7 @@ import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import theme from './shared/theme';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Home />,
