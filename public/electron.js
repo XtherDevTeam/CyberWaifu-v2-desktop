@@ -29,9 +29,18 @@ function createWindow() {
       slashes: true
     }))
   */
-  mainWindow.loadURL('http://localhost:3000/');
+  if (process.env.YOIMIYA === 'development') {
+    mainWindow.webContents.openDevTools()
+    mainWindow.loadURL('http://localhost:3000')
+  } else {
+    mainWindow.loadURL(url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    }))
+  }
 
-  mainWindow.webContents.openDevTools()
+  
   mainWindow.on('closed', function () {
     mainWindow = null
   })

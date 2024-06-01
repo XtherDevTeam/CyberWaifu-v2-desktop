@@ -1,0 +1,104 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Production Build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.20.2]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: npm install
+      run: |
+        npm install
+    
+    - name: Build Electron
+      run: |
+        NODE_ENV=production npm run electron-build build
+          
+    - name: upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: linux-build
+        path: dist/*.AppImage
+
+
+  windows:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [18.20.2]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: npm install
+      run: |
+        npm install
+    
+    - name: Build Electron
+      run: |
+        NODE_ENV=production npm run electron-build
+          
+    - name: upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: windows-build
+        path: dist/*.exe
+        
+
+  macos:
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        node-version: [18.20.2]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: npm install
+      run: |
+        npm install
+    
+    - name: Build Electron
+      run: |
+        NODE_ENV=production CSC_IDENTITY_AUTO_DISCOVERY=false npm run electron-build
+          
+    - name: upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: macos-build
+        path: dist/*.dmg
+        

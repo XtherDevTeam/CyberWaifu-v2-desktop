@@ -10,6 +10,7 @@ import icons from '../shared/icons';
 import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
+import CharacterEdit from '../components/CharacterEdit';
 
 function Home() {
   const [selectedIndex, setSelectedIndex] = React.useState({
@@ -154,7 +155,8 @@ function Home() {
         <mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
           {selectedIndex.type == 'Home' && <EmptyChatView />}
           {selectedIndex.type == 'About' && <About />}
-          {selectedIndex.type == 'Character' && <ChatroomView key={selectedIndex.title} {...selectedIndex} />}
+          {selectedIndex.type == 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
+          {selectedIndex.type == 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
         </mui.Paper>
       </mui.Box>
     </mui.Box>

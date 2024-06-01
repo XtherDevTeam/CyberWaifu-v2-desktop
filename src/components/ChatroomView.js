@@ -59,6 +59,7 @@ function ChatroomView({ id, charName }) {
   const [sessionUsername, setSessionUsername] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(false)
   const [isInitializing, setIsInitializing] = React.useState(true)
+  const [isInitialized, setIsInitialized] = React.useState(false)
 
   // sending message related
   const [chatImagesView, setChatImagesView] = React.useState([])
@@ -94,7 +95,8 @@ function ChatroomView({ id, charName }) {
   }
 
   React.useEffect(() => {
-    if (loadingVisible && !isInitializing) {
+    if (loadingVisible && chatHistoryView.length !== 0 && !isInitializing) {
+      console.log('草泥马', chatHistoryView)
       setIsLoading(true)
       loadChatHistory()
     }
@@ -103,10 +105,11 @@ function ChatroomView({ id, charName }) {
   React.useEffect(() => {
     setChatHistoryView([])
     charHistoryOffset.current = 0
+    setIsInitialized(false)
   }, [id, charName])
 
   React.useEffect(() => {
-    if (chatHistoryView.length === 0) {
+    if (chatHistoryView.length === 0 && !isInitialized) {
       // switch to another character
       chatSession.current = null
       charHistoryOffset.current = 0
@@ -158,6 +161,7 @@ function ChatroomView({ id, charName }) {
       if (isInitializing) {
         dummyMsgRef.current?.scrollIntoView({ behavior: 'auto' })
         setTimeout(() => setIsInitializing(false), 100)
+        setIsInitialized(true)
       }
     } else {
       // Filter out temporary messages from the chat history
