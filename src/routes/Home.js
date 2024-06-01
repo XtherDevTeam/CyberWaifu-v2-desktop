@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
 import { usePrefersColorScheme } from 'use-prefers-color-scheme';
 
 import About from '../components/About';
+import CharacterEdit from '../components/CharacterEdit';
 import ChatroomView from '../components/ChatroomView';
 import EmptyChatView from '../components/EmtryChatView';
 import Message from '../components/Message';
@@ -10,9 +12,9 @@ import icons from '../shared/icons';
 import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
-import CharacterEdit from '../components/CharacterEdit';
 
 function Home() {
+  let navigate = useNavigate()
   const [selectedIndex, setSelectedIndex] = React.useState({
     type: 'Home',
     title: 'Home'
@@ -43,7 +45,7 @@ function Home() {
     Remote.checkIfLoggedIn().then(res => {
       if (!res) {
         window.api.invoke('resize-window-login')
-        window.location.href = '/signin'
+        navigate('/signin')
       }
       Remote.characterList().then(res => {
         if (res.data.status) {

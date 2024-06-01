@@ -15,6 +15,31 @@ import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 import AudioMessagesView from './AudioMessagesView';
 import Message from './Message';
+import StickerPicker from './StickerPicker';
+
+const getCursorPosition = (ctrl) => {
+  let CaretPos = {
+    start: 0,
+    end: 0
+  };
+  if (ctrl?.resizableTextArea?.textArea.selectionStart) {
+    CaretPos.start = ctrl?.resizableTextArea?.textArea.selectionStart;
+  }
+  if (ctrl?.resizableTextArea?.textArea.selectionEnd) {
+    CaretPos.end = ctrl?.resizableTextArea?.textArea.selectionEnd;
+  }
+  return CaretPos;
+}
+
+const setCursorPosition = (ctrl, start, end) => {
+  ctrl.focus();
+  if (ctrl?.resizableTextArea?.textArea.selectionStart) {
+    ctrl.resizableTextArea.textArea.selectionStart = start;
+  }
+  if (ctrl?.resizableTextArea?.textArea.selectionEnd) {
+    ctrl.resizableTextArea.textArea.selectionEnd = end;
+  }
+}
 
 function useIsInViewport(ref) {
   const [isIntersecting, setIsIntersecting] = React.useState(false);
@@ -69,11 +94,20 @@ function ChatroomView({ id, charName }) {
   const [pendingSendTimer, setPendingSendTimer] = React.useState(null)
   const chatImages = React.useRef([])
   const [chatMessageInput, setChatMessageInput] = React.useState('')
+  const chatMessageInputRef = React.useRef(null)
+  const cursorRef = React.useRef({
+    start: 0,
+    end: 0
+  })
 
   const chatHistoryViewRef = React.useRef(null)
   const dummyMsgRef = React.useRef(null)
   const dummyLoadingRef = React.useRef(null)
   const loadingVisible = useIsInViewport(dummyLoadingRef)
+
+  // sticker & attachment
+  const [isStickerPickerOpen, setIsStickerPickerOpen] = React.useState(false)
+  const [stickerPickerAnchorEl, setStickerPickerAnchorEl] = React.useState(null)
 
   function loadChatHistory() {
     Remote.charHistory(id, charHistoryOffset.current++).then(r => {
@@ -131,6 +165,10 @@ function ChatroomView({ id, charName }) {
       }
     }
   }, [chatHistoryView])
+
+  React.useEffect(() => {
+    updateCursurPosition()
+  }, [chatMessageInput])
 
   React.useEffect(() => {
     if (useStickerSet !== 0) {
@@ -345,6 +383,12 @@ function ChatroomView({ id, charName }) {
     setPendingSendTimer(setTimeout(f, 1000))
   }
 
+  function updateCursurPosition() {
+    let CaretPos = getCursorPosition(chatMessageInputRef.current)
+    console.log('update cursor position', CaretPos)
+    cursorRef.current = CaretPos
+  }
+
   return (
     <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
@@ -392,12 +436,33 @@ function ChatroomView({ id, charName }) {
       </mui.Box>
       <mui.Grid ref={toolbarRef} container sx={{ width: 'calc(70vw - 30px)', position: 'absolute', bottom: 0, backgroundColor: scheme == 'light' ? theme.light.palette.surface.main : theme.dark.palette.surface.main }} >
         <mui.Grid item xs={9}>
-          <mui.TextField value={chatMessageInput} onChange={(e) => setChatMessageInput(e.target.value)} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
+          <mui.TextField ref={chatMessageInputRef} onBlur={() => {
+            updateCursurPosition()
+          }} value={chatMessageInput} onChange={(e) => {
+            setChatMessageInput(e.target.value)
+            updateCursurPosition()
+          }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
         </mui.Grid>
         <mui.Grid item xs={3}>
           <mui.Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', alignSelf: 'center', width: '100%' }}>
-            <mui.IconButton color='primary' variant='contained' >
+            <mui.IconButton color='primary' variant='contained' onClick={(e) => {
+              setIsStickerPickerOpen(!isStickerPickerOpen)
+              setStickerPickerAnchorEl(e.currentTarget)
+            }}>
               <icons.EmojiEmotions />
+              <StickerPicker anchorEl={stickerPickerAnchorEl} useStickerSet={useStickerSet} availableStickers={availableStickers} open={isStickerPickerOpen} onClose={(v) => {
+                // insert sticker to current position of chatMessageInput
+                v = `(${v})`
+                const insertStart = cursorRef.current.start
+                const insertEnd = cursorRef.current.end + v.length
+                const newText = chatMessageInput.slice(0, insertStart) + v + chatMessageInput.slice(insertStart)
+                setTimeout(() => {
+                  console.log('inserting sticker', v, 'to', insertStart, insertEnd)
+                  setCursorPosition(chatMessageInputRef.current, insertEnd, insertEnd)
+                  cursorRef.current = { start: insertEnd, end: insertEnd }
+                }, 200)
+                setChatMessageInput(newText)
+              }} />
             </mui.IconButton>
             <mui.IconButton color='primary' variant='contained' >
               <icons.Attachment />

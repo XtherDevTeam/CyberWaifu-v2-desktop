@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import Message from '../components/Message';
 import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
@@ -14,6 +16,7 @@ function getWindowDimensions() {
 }
 
 function SignIn() {
+  const navigate = useNavigate()
   const [serverUrl, setServerUrl] = React.useState('')
   const [stage, setStage] = React.useState(0)
   const [username, setUsername] = React.useState('')
@@ -66,7 +69,7 @@ function SignIn() {
       if (r.data.status) {
         setTimeout(() => {
           window.api.invoke('resize-window-normal')
-          window.location.href = '/'
+          navigate('/')
         }, 1000)
         setMessageTitle('Success')
         setMessageContent('Signed in successfully, redirecting...')
