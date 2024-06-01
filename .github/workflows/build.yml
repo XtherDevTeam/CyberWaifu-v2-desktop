@@ -64,7 +64,8 @@ jobs:
     
     - name: Build Electron
       run: |
-        npm run electron-build
+        npm run build
+        npx electron-builder
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2

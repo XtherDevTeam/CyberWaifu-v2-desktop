@@ -380,7 +380,8 @@ function ChatroomView({ id, charName }) {
     //   setPendingSendTimer(setTimeout(f, 10000))
     // }
     // if menu is open, user probably wants to send emotion stickers, so postpone sending message
-    setPendingSendTimer(setTimeout(f, 1000))
+    console.log('random timeout', Math.floor((Math.random() * 1000) % 4000 + 1000))
+    setPendingSendTimer(setTimeout(f, Math.floor((Math.random() * 1000) % 4000 + 1000)))
   }
 
   function updateCursurPosition() {
@@ -435,13 +436,30 @@ function ChatroomView({ id, charName }) {
         <mui.Box ref={dummyMsgRef} style={{ height: 0, width: 0, opacity: 0 }}></mui.Box>
       </mui.Box>
       <mui.Grid ref={toolbarRef} container sx={{ width: 'calc(70vw - 30px)', position: 'absolute', bottom: 0, backgroundColor: scheme == 'light' ? theme.light.palette.surface.main : theme.dark.palette.surface.main }} >
+        <mui.Grid item xs={12} sx={{paddingY: 10}}>
+          {isReceivingMessage && <mui.Typography variant='body2'><b>{charName}</b> is typing...</mui.Typography>}
+        </mui.Grid>
         <mui.Grid item xs={9}>
-          <mui.TextField ref={chatMessageInputRef} onBlur={() => {
-            updateCursurPosition()
-          }} value={chatMessageInput} onChange={(e) => {
-            setChatMessageInput(e.target.value)
-            updateCursurPosition()
-          }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
+          <mui.TextField ref={chatMessageInputRef}
+            onFocus={() => {
+              discardPendingMessageTimer()
+              if (chatSession.current) {
+                keepAliveTimer.current = setInterval(() => {
+                  Remote.chatKeepAlive(chatSession.current)
+                }, 5000)
+              }
+            }} onBlur={() => {
+              updateCursurPosition()
+              resetPendingMsgTimer()
+              if (keepAliveTimer.current) {
+                console.log('clearing keepalive timer')
+                clearInterval(keepAliveTimer.current)
+              }
+            }}
+            value={chatMessageInput} onChange={(e) => {
+              setChatMessageInput(e.target.value)
+              updateCursurPosition()
+            }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
         </mui.Grid>
         <mui.Grid item xs={3}>
           <mui.Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', alignSelf: 'center', width: '100%' }}>
@@ -467,7 +485,7 @@ function ChatroomView({ id, charName }) {
             <mui.IconButton color='primary' variant='contained' >
               <icons.Attachment />
             </mui.IconButton>
-            {!isReceivingMessage && <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
+            <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
               uploadAllAttachment().then(() => {
                 buildMessageChain(chatMessageInput, chatImages.current)
               }).catch(r => {
@@ -477,23 +495,9 @@ function ChatroomView({ id, charName }) {
                 setMessageOpen(true)
               })
               chatImages.current = []
-            }} onFocus={() => {
-              discardPendingMessageTimer()
-              if (chatSession.current) {
-                keepAliveTimer.current = setInterval(() => {
-                  Remote.chatKeepAlive(chatSession.current)
-                }, 5000)
-              }
-            }} onBlur={() => {
-              resetPendingMsgTimer()
-              if (keepAliveTimer.current) {
-                console.log('clearing keepalive timer')
-                clearInterval(keepAliveTimer.current)
-              }
             }}>
               Send
-            </mui.Button>}
-            {isReceivingMessage && <mui.Button variant='contained' startIcon={<icons.HourglassTop />} disabled color='secondary'>Waiting...</mui.Button>}
+            </mui.Button>
           </mui.Box>
         </mui.Grid>
       </mui.Grid>
