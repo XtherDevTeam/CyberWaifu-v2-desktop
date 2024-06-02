@@ -87,12 +87,12 @@ function ChatroomView({ id, charName }) {
   const [isInitialized, setIsInitialized] = React.useState(false)
 
   // sending message related
-  const [chatImagesView, setChatImagesView] = React.useState([])
+  const [chatFilesView, setChatFilesView] = React.useState([])
   const keepAliveTimer = React.useRef(null)
   const [isTyping, setIsTyping] = React.useState(false)
   const [pendingMsgChain, setPendingMsgChain] = React.useState([])
   const [pendingSendTimer, setPendingSendTimer] = React.useState(null)
-  const chatImages = React.useRef([])
+  const chatFiles = React.useRef([])
   const [chatMessageInput, setChatMessageInput] = React.useState('')
   const chatMessageInputRef = React.useRef(null)
   const cursorRef = React.useRef({
@@ -187,6 +187,10 @@ function ChatroomView({ id, charName }) {
     resetPendingMsgTimer()
   }, [pendingMsgChain])
 
+  React.useEffect(() => {
+    chatFiles.current = [...chatFilesView]
+  }, [chatFilesView])
+
 
   function receiveMessage(response, order = false) {
     setIsReceivingMessage(false)
@@ -280,12 +284,13 @@ function ChatroomView({ id, charName }) {
 
   function uploadAllAttachment() {
     return (async () => {
-      for (let i in chatImages.current) {
-        let r = await fs.uploadAsync(Remote.attachmentUploadImage(), chatImages.current[i], { httpMethod: 'POST', uploadType: fs.FileSystemUploadType.MULTIPART })
+      for (let i in chatFiles.current) {
+        console.log(i)
+        let r = await fs.uploadAsync(chatFiles.current[i].type.startsWith('image/') ? Remote.attachmentUploadImage() : Remote.attachmentUploadAudio(), chatFiles.current[i])
         if (r.status == 200) {
           let data = await r.json()
           if (data.status) {
-            chatImages.current[i] = data.id
+            chatFiles.current[i] = data.id
           } else {
             throw data.data
           }
@@ -297,8 +302,8 @@ function ChatroomView({ id, charName }) {
   }
 
   function clearChatImages() {
-    chatImages.current = []
-    setChatImagesView([])
+    chatFiles.current = []
+    setChatFilesView([])
   }
 
   function sendMessageChain(msgChain) {
@@ -390,6 +395,13 @@ function ChatroomView({ id, charName }) {
     cursorRef.current = CaretPos
   }
 
+  function addAttachment() {
+    fs.launchFilePickerAsync('image/*; audio/*', true).then(r => {
+      setChatFilesView([...chatFilesView, ...r])
+      console.log('selected files', chatFiles.current)
+    })
+  }
+
   return (
     <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
@@ -436,7 +448,7 @@ function ChatroomView({ id, charName }) {
         <mui.Box ref={dummyMsgRef} style={{ height: 0, width: 0, opacity: 0 }}></mui.Box>
       </mui.Box>
       <mui.Grid ref={toolbarRef} container sx={{ width: 'calc(70vw - 30px)', position: 'absolute', bottom: 0, backgroundColor: scheme == 'light' ? theme.light.palette.surface.main : theme.dark.palette.surface.main }} >
-        <mui.Grid item xs={12} sx={{paddingY: 10}}>
+        <mui.Grid item xs={12} sx={{ paddingY: 10 }}>
           {isReceivingMessage && <mui.Typography variant='body2'><b>{charName}</b> is typing...</mui.Typography>}
         </mui.Grid>
         <mui.Grid item xs={9}>
@@ -454,6 +466,17 @@ function ChatroomView({ id, charName }) {
               if (keepAliveTimer.current) {
                 console.log('clearing keepalive timer')
                 clearInterval(keepAliveTimer.current)
+              }
+            }}
+            onPaste={(e) => {
+              e.preventDefault()
+              let items = (e.clipboardData || e.originalEvent.clipboardData).items;
+              for (var index in items) {
+                var item = items[index];
+                if (item.kind === 'file') {
+                  let blob = item.getAsFile();
+                  setChatFilesView([...chatFilesView, blob])
+                }
               }
             }}
             value={chatMessageInput} onChange={(e) => {
@@ -482,23 +505,39 @@ function ChatroomView({ id, charName }) {
                 setChatMessageInput(newText)
               }} />
             </mui.IconButton>
-            <mui.IconButton color='primary' variant='contained' >
+            <mui.IconButton color='primary' variant='contained' onClick={() => addAttachment()} >
               <icons.Attachment />
             </mui.IconButton>
             <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
               uploadAllAttachment().then(() => {
-                buildMessageChain(chatMessageInput, chatImages.current)
+                buildMessageChain(chatMessageInput, chatFiles.current)
               }).catch(r => {
                 setMessageTitle('Error')
                 setMessageContent(r)
                 setMessageType('error')
                 setMessageOpen(true)
               })
-              chatImages.current = []
+              chatFiles.current = []
             }}>
               Send
             </mui.Button>
           </mui.Box>
+        </mui.Grid>
+        <mui.Grid item xs={12}>
+          {chatFilesView.length !== 0 && <mui.List sx={{ width: '100%', paddingY: 10, maxHeight: '30vh', overflow: 'scroll' }}>
+            {chatFilesView.map((v, k) => <mui.ListItem key={k}>
+              <mui.ListItemIcon>
+                {v.type.startsWith('audio/') && <icons.VoiceChat />}
+                {v.type.startsWith('image/') && <mui.Avatar src={URL.createObjectURL(v)} sx={{ width: 24, height: 24 }}></mui.Avatar>}
+              </mui.ListItemIcon>
+              <mui.ListItemText primary={v.name} secondary={v.type.startsWith('audio/') ? 'Voice message' : 'Image attachment'} />
+              <mui.ListItemSecondaryAction>
+                <mui.IconButton color='primary' edge='end' onClick={() => {
+                  setChatFilesView([...chatFilesView.slice(0, k), ...chatFilesView.slice(k + 1)])
+                }}><icons.Delete /></mui.IconButton>
+              </mui.ListItemSecondaryAction>
+            </mui.ListItem>)}
+          </mui.List>}
         </mui.Grid>
       </mui.Grid>
     </mui.Box >

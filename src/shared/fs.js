@@ -30,9 +30,6 @@ function uploadAsync(remote, fileObject, config) {
   return fetch(remote, {
     method: 'POST',
     body: body,
-    headers: {
-      'Content-Type':'multipart/form-data',
-    },
     ...config
   })
 }
