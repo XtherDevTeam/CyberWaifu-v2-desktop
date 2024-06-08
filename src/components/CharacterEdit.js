@@ -120,7 +120,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={charPrompt}
           onOk={(v) => {
             setCharPrompt(v)
-            submitChange(charName, v, pastMemories, exampleChats, useStickerSet, useTTSService.id)
+            submitChange(charName, v, pastMemories, exampleChats, useStickerSet.id, useTTSService.id)
           }}
         />
         <ContentEditDialog
