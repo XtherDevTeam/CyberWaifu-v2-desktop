@@ -19,6 +19,7 @@ import { ThemeProvider } from '@mui/material';
 import reportWebVitals from './reportWebVitals';
 import Home from './routes/Home';
 import SignIn from './routes/SignIn';
+import VoiceChat from './routes/VoiceChat';
 import theme from './shared/theme';
 
 const router = createHashRouter([
@@ -29,6 +30,10 @@ const router = createHashRouter([
   {
     path: '/signin',
     element: <SignIn />,
+  },
+  {
+    path: '/voice_chat',
+    element: <VoiceChat />,
   },
   {
     path: '*',
@@ -46,9 +51,9 @@ function App() {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

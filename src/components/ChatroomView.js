@@ -451,7 +451,7 @@ function ChatroomView({ id, charName }) {
         <mui.Grid item xs={12} sx={{ paddingY: 10 }}>
           {isReceivingMessage && <mui.Typography variant='body2'><b>{charName}</b> is typing...</mui.Typography>}
         </mui.Grid>
-        <mui.Grid item xs={9}>
+        <mui.Grid item xs={8}>
           <mui.TextField ref={chatMessageInputRef}
             onFocus={() => {
               discardPendingMessageTimer()
@@ -484,7 +484,7 @@ function ChatroomView({ id, charName }) {
               updateCursurPosition()
             }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
         </mui.Grid>
-        <mui.Grid item xs={3}>
+        <mui.Grid item xs={4}>
           <mui.Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', alignSelf: 'center', width: '100%' }}>
             <mui.IconButton color='primary' variant='contained' onClick={(e) => {
               setIsStickerPickerOpen(!isStickerPickerOpen)
@@ -507,6 +507,11 @@ function ChatroomView({ id, charName }) {
             </mui.IconButton>
             <mui.IconButton color='primary' variant='contained' onClick={() => addAttachment()} >
               <icons.Attachment />
+            </mui.IconButton>
+            <mui.IconButton color='primary' variant='contained' onClick={() => {
+              window.api.invoke('create-voice-chat-window', charName)
+            }} >
+              <icons.VoiceChat />
             </mui.IconButton>
             <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
               uploadAllAttachment().then(() => {
