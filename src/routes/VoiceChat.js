@@ -5,7 +5,10 @@ import React from 'react';
 import { usePrefersColorScheme } from 'use-prefers-color-scheme';
 
 import {
+  ConnectionState,
   LiveKitRoom,
+  useConnectionState,
+  useRoomContext,
   VideoConference,
 } from '@livekit/components-react';
 
@@ -25,6 +28,10 @@ function VoiceChat() {
   const [messageType, setMessageType] = React.useState('success')
   const [messageOpen, setMessageOpen] = React.useState(false)
   const [connect, setConnect] = React.useState(false)
+
+  // const liveKitRoom = useRoomContext()
+  // const livekitRoomState = null
+
 
   React.useEffect(() => {
     const p = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf('?')));
@@ -64,7 +71,7 @@ function VoiceChat() {
 
   React.useEffect(() => {
     if (sessionName !== '' && !connect) {
-      Remote.rtVcTerminate(sessionName).then(data => {
+      /*Remote.rtVcTerminate(sessionName).then(data => {
         if (data.data.status) {
           setConnect(false)
         } else {
@@ -78,7 +85,8 @@ function VoiceChat() {
         setMessageContent(err.message)
         setMessageType('error')
         setMessageOpen(true)
-      })
+      })*/
+     window.close()
     }
   }, [connect])
 
@@ -88,7 +96,11 @@ function VoiceChat() {
       publishDefaults: {
         red: false,
       },
-    }} serverUrl={`ws://${remoteUrl}`} token={accessToken} connect={connect}>
+    }} serverUrl={`ws://${remoteUrl}`} token={accessToken} connect={connect}
+    onDisconnected={() => {
+      setConnect(false)
+    }}
+    >
       <VideoConference ></VideoConference>
     </LiveKitRoom>
   </mui.Box>

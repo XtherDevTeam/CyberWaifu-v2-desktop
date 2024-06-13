@@ -50,7 +50,7 @@ function createWindow() {
 
 function createVoiceChatWindow(charName) {
   voiceChatWindow = new BrowserWindow({
-    width: 320, height: 500, webPreferences: {
+    width: 425, height: 500, webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
@@ -92,7 +92,7 @@ ipcMain.on('resize-window-normal', function (event) {
 
 // listen event on `resize-window-login`
 ipcMain.on('resize-window-login', function (event) {
-  mainWindow.setSize(425, 500)
+  mainWindow.setSize(320, 500)
 })
 
 ipcMain.on('create-voice-chat-window', function (event, charName) {
