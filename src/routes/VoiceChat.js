@@ -5,10 +5,7 @@ import React from 'react';
 import { usePrefersColorScheme } from 'use-prefers-color-scheme';
 
 import {
-  ConnectionState,
   LiveKitRoom,
-  useConnectionState,
-  useRoomContext,
   VideoConference,
 } from '@livekit/components-react';
 
