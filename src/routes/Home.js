@@ -13,6 +13,7 @@ import icons from '../shared/icons';
 import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
+import TTSServicesView from '../components/TTSServicesView';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -56,6 +57,54 @@ function CreateStickerSetDialog({ state, onOk, onClose }) {
     </mui.Dialog>)
 }
 
+function CreateTTSServiceDialog({ state, onOk, onClose }) {
+  let [name, setName] = React.useState('')
+  let [description, setDescription] = React.useState('')
+  let [url, setUrl] = React.useState('')
+  let [ttsInferYamlPath, setTTSInferYamlPath] = React.useState('')
+
+  // message related
+  const [messageTitle, setMessageTitle] = React.useState('')
+  const [messageContent, setMessageContent] = React.useState('')
+  const [messageType, setMessageType] = React.useState('')
+  const [messageOpen, setMessageOpen] = React.useState(false)
+
+  return (
+    <mui.Dialog open={state} onClose={onClose}>
+      <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
+      <mui.DialogTitle>Create TTS Service</mui.DialogTitle>
+      <mui.DialogContent>
+        <mui.DialogContentText>
+          If you are using fast_inference_ branch of GPT-SoVITs, make sure you provide the path to tts_infer.yaml properly.
+        </mui.DialogContentText>
+        <mui.TextField style={{ marginTop: 10 }} label="TTS Service Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+        <mui.TextField style={{ marginTop: 10 }} label="TTS Service Description" fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />
+        <mui.TextField style={{ marginTop: 10 }} label="TTS Server Endpoint" fullWidth value={url} onChange={(e) => setUrl(e.target.value)} />
+        <mui.TextField style={{ marginTop: 10 }} label="Path to tts_infer.yaml" fullWidth value={ttsInferYamlPath} onChange={(e) => setTTSInferYamlPath(e.target.value)} />
+      </mui.DialogContent>
+      <mui.DialogActions>
+        <mui.Button onClick={onClose}>Cancel</mui.Button>
+        <mui.Button onClick={() => {
+          Remote.createTTSService(name, description, url, ttsInferYamlPath).then(res => {
+            if (res.data.status) {
+              setMessageTitle('Success')
+              setMessageContent('Sticker set created successfully.')
+              setMessageType('success')
+              setMessageOpen(true)
+            } else {
+              setMessageTitle('Error')
+              setMessageContent(res.data.data)
+              setMessageType('error')
+              setMessageOpen(true)
+            }
+          })
+          onOk(name)
+          onClose()
+        }}>Create</mui.Button>
+      </mui.DialogActions>
+    </mui.Dialog>)
+}
+
 function Home() {
   let navigate = useNavigate()
   const [selectedIndex, setSelectedIndex] = React.useState({
@@ -64,6 +113,7 @@ function Home() {
   });
   const [charList, setCharList] = React.useState([]);
   const [createStickerSetDialogState, setCreateStickerSetDialogState] = React.useState(false)
+  const [createTTSServiceDialogState, setCreateTTSServiceDialogState] = React.useState(false)
 
   // message related
   const [messageTitle, setMessageTitle] = React.useState('')
@@ -112,9 +162,19 @@ function Home() {
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
       <CreateStickerSetDialog state={createStickerSetDialogState} onOk={(name) => {
         console.log('create sticker set', name)
+        handleListItemClick('', {})
+        handleListItemClick('Stickers', {})
         setCreateStickerSetDialogState(false)
       }} onClose={() => {
         setCreateStickerSetDialogState(false)
+      }} />
+      <CreateTTSServiceDialog state={createTTSServiceDialogState} onOk={(name) => {
+        console.log('create tts service', name)
+        handleListItemClick('', {})
+        handleListItemClick('TTS Services', {})
+        setCreateTTSServiceDialogState(false)
+      }} onClose={() => {
+        setCreateTTSServiceDialogState(false)
       }} />
 
       <mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
@@ -193,13 +253,12 @@ function Home() {
               <icons.MoreVert />
             </mui.IconButton>}
             {selectedIndex.type == 'Stickers' && <mui.IconButton color="inherit" onClick={() => {
-              // TODO: implement add sticker pack
               setCreateStickerSetDialogState(true)
             }}>
               <icons.Add />
             </mui.IconButton>}
             {selectedIndex.type == 'TTS Services' && <mui.IconButton color="inherit" onClick={() => {
-              // TODO: implement add TTS service
+              setCreateTTSServiceDialogState(true)
             }}>
               <icons.Add />
             </mui.IconButton>}
@@ -211,7 +270,7 @@ function Home() {
           {selectedIndex.type == 'About' && <About />}
           {selectedIndex.type == 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
           {selectedIndex.type == 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
-          {selectedIndex.type == 'TTS Services' && <></>}
+          {selectedIndex.type == 'TTS Services' && <TTSServicesView></TTSServicesView>}
           {selectedIndex.type == 'Stickers' && <StickersView></StickersView>}
         </mui.Paper>
       </mui.Box>

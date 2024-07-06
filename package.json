@@ -39,7 +39,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-start": "set YOIMIYA=development ; electron .",
+    "electron-start": "electron .",
     "electron-build": "react-scripts build ; electron-builder"
   },
   "eslintConfig": {
