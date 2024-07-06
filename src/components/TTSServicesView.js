@@ -74,6 +74,8 @@ function EditTTSServiceDialog({ state, serviceID, onOk, onCancel }) {
         setMessageType('error')
         setMessageOpen(true)
       }
+    }).catch(e => {
+      console.error(e)
     })
   }
 
@@ -170,6 +172,8 @@ function EditTTSServiceDialog({ state, serviceID, onOk, onCancel }) {
             setMessageType('error')
             setMessageOpen(true)
           }
+        }).catch(e => {
+          console.error(e)
         })
       }}>Save</mui.Button>
     </mui.DialogActions>
@@ -197,13 +201,14 @@ function TTSServicesView() {
         setMessageType('error')
         setMessageOpen(true)
       }
+    }).catch(e => {
+      console.error(e)
     })
   }, [])
   return <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
     <mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       <EditTTSServiceDialog state={editTTSServiceDialogState} serviceID={editTTSServerDialogServiceID} onOk={(v) => {
-
         setEditTTSServiceDialogState(false)
         setEditTTSServerDialogServiceID(null)
       }} onCancel={() => {

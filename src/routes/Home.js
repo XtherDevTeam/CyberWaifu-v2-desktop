@@ -49,6 +49,8 @@ function CreateStickerSetDialog({ state, onOk, onClose }) {
               setMessageType('error')
               setMessageOpen(true)
             }
+          }).catch(e => {
+            console.error(e)
           })
           onOk(name)
           onClose()
@@ -97,6 +99,8 @@ function CreateTTSServiceDialog({ state, onOk, onClose }) {
               setMessageType('error')
               setMessageOpen(true)
             }
+          }).catch(e => {
+            console.error(e)
           })
           onOk(name)
           onClose()
@@ -150,7 +154,11 @@ function Home() {
           setMessageType('error')
           setMessageOpen(true)
         }
+      }).catch(e => {
+        console.error(e)
       })
+    }).catch(e => {
+      console.error(e)
     })
   }, []);
   React.useLayoutEffect(() => {
