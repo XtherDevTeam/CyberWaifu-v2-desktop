@@ -529,7 +529,7 @@ function ChatroomView({ id, charName }) {
           </mui.Box>
         </mui.Grid>
         <mui.Grid item xs={12}>
-          {chatFilesView.length !== 0 && <mui.List sx={{ width: '100%', paddingY: 10, maxHeight: '30vh', overflow: 'scroll' }}>
+          {chatFilesView.length !== 0 && <mui.List sx={{ width: '100%', paddingY: 10, maxHeight: '30vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
             {chatFilesView.map((v, k) => <mui.ListItem key={k}>
               <mui.ListItemIcon>
                 {v.type.startsWith('audio/') && <icons.VoiceChat />}

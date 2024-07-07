@@ -87,7 +87,7 @@ function EditTTSServiceDialog({ state, serviceID, onOk, onCancel }) {
 
   return <mui.Dialog open={state} onClose={onCancel}>
     <AddReferenceAudioDialog state={addReferencAudioDialogState} onOk={(name, text, language, refAudioPath) => {
-      Remote.addTTSReferenceAudio(serviceID, name, text, language, refAudioPath).then(r => {
+      Remote.addTTSReferenceAudio(serviceID, name, text, refAudioPath, language).then(r => {
         if (r.data.status) {
           refreshServiceInfo()
           setMessageTitle('Success')
@@ -172,6 +172,7 @@ function EditTTSServiceDialog({ state, serviceID, onOk, onCancel }) {
             setMessageType('error')
             setMessageOpen(true)
           }
+          onOk('')
         }).catch(e => {
           console.error(e)
         })

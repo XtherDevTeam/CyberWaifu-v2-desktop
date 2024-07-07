@@ -170,16 +170,16 @@ function Home() {
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
       <CreateStickerSetDialog state={createStickerSetDialogState} onOk={(name) => {
         console.log('create sticker set', name)
-        handleListItemClick('', {})
-        handleListItemClick('Stickers', {})
+        handleListItemClick('', '')
+        handleListItemClick('Stickers', '')
         setCreateStickerSetDialogState(false)
       }} onClose={() => {
         setCreateStickerSetDialogState(false)
       }} />
       <CreateTTSServiceDialog state={createTTSServiceDialogState} onOk={(name) => {
         console.log('create tts service', name)
-        handleListItemClick('', {})
-        handleListItemClick('TTS Services', {})
+        handleListItemClick('', '')
+        handleListItemClick('TTS Services', '')
         setCreateTTSServiceDialogState(false)
       }} onClose={() => {
         setCreateTTSServiceDialogState(false)
