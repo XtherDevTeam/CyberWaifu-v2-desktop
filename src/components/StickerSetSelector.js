@@ -49,11 +49,11 @@ function StickerSetSelector({ defaultValue, onChange, onErr, style }) {
       <mui.Portal>
         <mui.Dialog open={status} onClose={() => setStatus(false)}>
           <mui.DialogTitle>Select sticker set</mui.DialogTitle>
-          <mui.DialogContent>
+          <mui.DialogContent data-overlayscrollbars-initialize>
             <mui.Typography variant="body2">
               Choose a sticker set for character to use during conversation
             </mui.Typography>
-            <mui.List sx={{ maxHeight: '40vh', overflow: 'scroll' }}>
+            <mui.List sx={{ maxHeight: '40vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
               {stickerList.map((r) => (
                 <mui.ListItemButton
                   key={r.id}

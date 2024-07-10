@@ -14,6 +14,7 @@ import mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 import TTSServicesView from '../components/TTSServicesView';
+import More from '../components/More';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -137,6 +138,21 @@ function Home() {
     });
   }
 
+  function handleCharListUpdate() {
+    Remote.characterList().then(res => {
+      if (res.data.status) {
+        setCharList(res.data.data)
+      } else {
+        setMessageTitle('Error')
+        setMessageContent(res.data.message)
+        setMessageType('error')
+        setMessageOpen(true)
+      }
+    }).catch(e => {
+      console.error(e)
+    })
+  }
+
   React.useEffect(() => {
     console.log('Home');
     console.log(theme.light)
@@ -145,18 +161,10 @@ function Home() {
         window.api.invoke('resize-window-login')
         navigate('/signin')
       }
-      Remote.characterList().then(res => {
-        if (res.data.status) {
-          setCharList(res.data.data)
-        } else {
-          setMessageTitle('Error')
-          setMessageContent(res.data.message)
-          setMessageType('error')
-          setMessageOpen(true)
-        }
-      }).catch(e => {
-        console.error(e)
-      })
+      handleCharListUpdate()
+      setInterval(() => {
+        handleCharListUpdate()
+      }, 60000) // update every 60 seconds
     }).catch(e => {
       console.error(e)
     })
@@ -235,11 +243,11 @@ function Home() {
               </mui.ListItemIcon>
               <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="TTS Services"></mui.ListItemText>
             </mui.ListItemButton>
-            <mui.ListItemButton selected={selectedIndex.type == 'About'} onClick={() => handleListItemClick('About', 'About')}>
+            <mui.ListItemButton selected={selectedIndex.type == 'More'} onClick={() => handleListItemClick('More', 'More')}>
               <mui.ListItemIcon>
                 <icons.Apps />
               </mui.ListItemIcon>
-              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="About"></mui.ListItemText>
+              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="More"></mui.ListItemText>
             </mui.ListItemButton>
           </mui.Box>
         </mui.List>
@@ -275,7 +283,7 @@ function Home() {
         <mui.Toolbar />
         <mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
           {selectedIndex.type == 'Home' && <EmptyChatView />}
-          {selectedIndex.type == 'About' && <About />}
+          {selectedIndex.type == 'More' && <More />}
           {selectedIndex.type == 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
           {selectedIndex.type == 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
           {selectedIndex.type == 'TTS Services' && <TTSServicesView></TTSServicesView>}

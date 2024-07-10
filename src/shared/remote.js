@@ -37,6 +37,15 @@ function getUserName() {
   })
 }
 
+
+function getServiceInfo() {
+  return axios.get(`${serverUrl}/api/v1/service/info`)
+}
+
+function updateUserPersona(persona) {
+  return axios.post(`${serverUrl}/api/v1/update_persona`, {persona})
+}
+
 function checkIfInitialized() {
   return axios.get(`${serverUrl}/api/v1/service/info`).then(r => {
     return r.data.data.initialized
@@ -337,4 +346,7 @@ export {
   updatePassword,
   updateTTSService,
   updateUserName,
+  getServiceInfo,
+
+  updateUserPersona,
 };
