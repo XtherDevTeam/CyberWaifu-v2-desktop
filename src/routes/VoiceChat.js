@@ -83,7 +83,7 @@ function VoiceChat() {
         setMessageType('error')
         setMessageOpen(true)
       })*/
-     window.close()
+    //  window.close()
     }
   }, [connect])
 
@@ -93,8 +93,9 @@ function VoiceChat() {
       publishDefaults: {
         red: false,
       },
-    }} serverUrl={`ws://${remoteUrl}`} token={accessToken} connect={connect}
+    }} serverUrl={`wss://${remoteUrl}`} token={accessToken} connect={connect}
     onDisconnected={() => {
+      console.log('disconnected')
       setConnect(false)
     }}
     >

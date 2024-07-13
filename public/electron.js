@@ -4,9 +4,10 @@ const url = require('url')
 
 // ipcMain
 const { ipcMain } = require('electron')
-const { useCookie } = require('./useCookie')
+const { useCookie, useCORS } = require('./useCookie')
 
 useCookie()
+useCORS()
 
 // keep the window object global reference to prevent it from being garbage collected when the JavaScript object is released.
 let mainWindow
@@ -16,7 +17,8 @@ let voiceChatWindow
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1024, height: 600, webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false,
     }
   })
   if (process.platform !== 'darwin') {
@@ -51,7 +53,8 @@ function createWindow() {
 function createVoiceChatWindow(charName) {
   voiceChatWindow = new BrowserWindow({
     width: 425, height: 500, webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      webSecurity: false,
     }
   })
   if (process.platform !== 'darwin') {
@@ -71,7 +74,8 @@ function createVoiceChatWindow(charName) {
     voiceChatWindow.loadURL(`http://localhost:3000#/voice_chat?charName=${encodeURIComponent(charName)}`)
   } else {
     voiceChatWindow.loadURL(url.format({
-      pathname: path.join(__dirname, `index.html#/voice_chat?charName=${encodeURIComponent(charName)}`),
+      pathname: path.join(__dirname, `index.html`),
+      hash: `#/voice_chat?charName=${encodeURIComponent(charName)}`,
       protocol: 'file:',
       slashes: true
     }))

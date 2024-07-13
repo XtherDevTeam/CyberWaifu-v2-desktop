@@ -1,5 +1,6 @@
 const { app, session } = require('electron');
 
+
 /**
  * electron15 后，跨域cookie无法携带，
  * 以下为解决办法
@@ -8,6 +9,10 @@ function useCookie() {
     app.whenReady().then(() => {
         const filter = { urls: ['https://*/*'] };
         session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
+            console.log('received headers', details.url, 'fucking electron')
+            details.responseHeaders['Access-Control-Allow-Origin'] = [
+                process.env.YOIMIYA === 'development' ? 'http://localhost:3000' : 'capacitor-electron://-'
+            ]
             if (details.responseHeaders && details.responseHeaders['Set-Cookie']) {
                 console.log(details.responseHeaders['Set-Cookie'])
                 for (let i = 0; i < details.responseHeaders['Set-Cookie'].length; i++) {
@@ -30,6 +35,20 @@ function useCookie() {
     });
 }
 
+function useCORS() {
+    app.whenReady().then(() => {
+        if (details.requestHeaders && details.requestHeaders['Origin']) {
+            const filter = { urls: ['https://*/*'] };
+            session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+                console.log('received mtherfker')
+                details.requestHeaders['Origin'] = null;
+                callback({ requestHeaders: details.requestHeaders })
+            });
+        }
+    })
+}
+
 module.exports = {
     useCookie,
+    useCORS
 };

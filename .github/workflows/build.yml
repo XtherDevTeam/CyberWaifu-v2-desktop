@@ -92,10 +92,14 @@ jobs:
     - name: npm install
       run: |
         npm install
+
+    - name: Build application
+      run: |
+        npm run build
     
     - name: Build Electron
       run: |
-        CSC_IDENTITY_AUTO_DISCOVERY=false npm run electron-build
+        CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --universal
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2
