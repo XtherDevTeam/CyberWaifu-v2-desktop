@@ -95,7 +95,7 @@ jobs:
 
     - name: Build application
       run: |
-        npm run build
+        CI=false npm run build
     
     - name: Build Electron
       run: |
