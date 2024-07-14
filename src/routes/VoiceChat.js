@@ -83,7 +83,7 @@ function VoiceChat() {
         setMessageType('error')
         setMessageOpen(true)
       })*/
-    //  window.close()
+      //  window.close()
     }
   }, [connect])
 
@@ -94,10 +94,12 @@ function VoiceChat() {
         red: false,
       },
     }} serverUrl={`wss://${remoteUrl}`} token={accessToken} connect={connect}
-    onDisconnected={() => {
-      console.log('disconnected')
-      setConnect(false)
-    }}
+      onDisconnected={() => {
+        console.log('disconnected')
+        setConnect(false)
+      }}
+      audio={true}
+      video={true}
     >
       <VideoConference ></VideoConference>
     </LiveKitRoom>
