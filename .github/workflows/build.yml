@@ -99,7 +99,7 @@ jobs:
     
     - name: Build Electron
       run: |
-        CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --universal
+        CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --universal
           
     - name: upload artifacts
       uses: actions/upload-artifact@v2
