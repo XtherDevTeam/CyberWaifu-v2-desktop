@@ -119,10 +119,10 @@ function charHistory(charId, offset = 0) {
   return axios.post(`${serverUrl}/api/v1/char/${charId}/history/${offset}`)
 }
 
-function charNew(charName, useTTSService, useStickerSet, charPrompt, pastMemories, exampleChats) {
+function charNew(charName, useTTSModel, useStickerSet, charPrompt, pastMemories, exampleChats) {
   return axios.post(`${serverUrl}/api/v1/char/new`, {
     charName,
-    useTTSService,
+    useTTSModel,
     useStickerSet,
     charPrompt,
     pastMemories,
@@ -166,14 +166,14 @@ function stickerList(setId) {
   return axios.post(`${serverUrl}/api/v1/sticker/list`, { setId })
 }
 
-function editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSService) {
+function editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel) {
   return axios.post(`${serverUrl}/api/v1/char/${id}/edit`, {
     useStickerSet,
     charName,
     charPrompt,
     pastMemories,
     exampleChats,
-    useTTSService
+    useTTSModel
   })
 }
 
@@ -300,6 +300,47 @@ function rtVcTerminate(session) {
   })
 }
 
+// gpt_sovits_middleware/info
+function getMiddlewareInfo() {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/info`)
+}
+
+// gpt_sovits_middleware/run_training
+function runTraining(enabled_char_names, sources_to_fetch) {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/run_training`, {
+    enabled_char_names,
+    sources_to_fetch,
+  })
+}
+
+// gpt_sovits_middleware/track
+function trackTask(id) {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/track`, {
+    id,
+  })
+}
+
+// gpt_sovits_middleware/tasks
+function getMiddlewareTasks() {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/tasks`)
+} 
+
+
+// gpt_sovits_middleware/set_url
+function setMiddlewareUrl(url) {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/set_url`, {
+    url,
+  })
+}
+
+
+function deleteMiddlewareTask(id) {
+  return axios.post(`${serverUrl}/api/v1/gpt_sovits_middleware/delete_task`, {
+    id,
+  })
+}
+
+
 export {
   addStickerToSet,
   addTTSReferenceAudio,
@@ -347,6 +388,11 @@ export {
   updateTTSService,
   updateUserName,
   getServiceInfo,
-
   updateUserPersona,
+  getMiddlewareInfo,
+  runTraining,
+  trackTask,
+  getMiddlewareTasks,
+  deleteMiddlewareTask,
+  setMiddlewareUrl,
 };

@@ -15,6 +15,7 @@ import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 import TTSServicesView from '../components/TTSServicesView';
 import More from '../components/More';
+import GPTSoViTsMiddleware from '../components/GPTSoViTsMiddleware';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -237,11 +238,11 @@ function Home() {
               </mui.ListItemIcon>
               <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Stickers"></mui.ListItemText>
             </mui.ListItemButton>
-            <mui.ListItemButton selected={selectedIndex.type == 'TTS Services'} onClick={() => handleListItemClick('TTS Services', 'TTS Services')}>
+            <mui.ListItemButton selected={selectedIndex.type == 'GPTSoViTsMiddleware'} onClick={() => handleListItemClick('GPTSoViTsMiddleware', 'GPT-SoVITs Middleware')}>
               <mui.ListItemIcon>
                 <icons.Mic />
               </mui.ListItemIcon>
-              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="TTS Services"></mui.ListItemText>
+              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="GPT-SoVITs Middleware"></mui.ListItemText>
             </mui.ListItemButton>
             <mui.ListItemButton selected={selectedIndex.type == 'More'} onClick={() => handleListItemClick('More', 'More')}>
               <mui.ListItemIcon>
@@ -273,11 +274,6 @@ function Home() {
             }}>
               <icons.Add />
             </mui.IconButton>}
-            {selectedIndex.type == 'TTS Services' && <mui.IconButton color="inherit" onClick={() => {
-              setCreateTTSServiceDialogState(true)
-            }}>
-              <icons.Add />
-            </mui.IconButton>}
           </mui.Toolbar>
         </mui.AppBar>
         <mui.Toolbar />
@@ -288,6 +284,7 @@ function Home() {
           {selectedIndex.type == 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
           {selectedIndex.type == 'TTS Services' && <TTSServicesView></TTSServicesView>}
           {selectedIndex.type == 'Stickers' && <StickersView></StickersView>}
+          {selectedIndex.type == 'GPTSoViTsMiddleware' && <GPTSoViTsMiddleware></GPTSoViTsMiddleware>}
         </mui.Paper>
       </mui.Box>
     </mui.Box>

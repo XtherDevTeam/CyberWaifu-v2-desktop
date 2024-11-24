@@ -7,6 +7,7 @@ import * as Remote from '../shared/remote';
 import ContentEditDialog from './ContentEditDialog';
 import StickerSetSelector from './StickerSetSelector';
 import TTSServiceSelector from './TTSServiceSelector';
+import TTSModelSelector from './TTSModelSelector';
 
 function CharacterEdit({ id, charNameInit }) {
   const [charInfo, setCharInfo] = React.useState({})
@@ -22,7 +23,7 @@ function CharacterEdit({ id, charNameInit }) {
   const [pastMemories, setPastMemories] = React.useState("")
   const [exampleChats, setExampleChats] = React.useState("")
   const [useStickerSet, setUseStickerSet] = React.useState(null)
-  const [useTTSService, setUseTTSService] = React.useState(null)
+  const [useTTSModel, setUseTTSModel] = React.useState("None")
   const [initialized, setInitialized] = React.useState(false)
 
 
@@ -39,18 +40,11 @@ function CharacterEdit({ id, charNameInit }) {
             setUseStickerSet(r.data.data)
           }
         })
-        if (r.data.data.ttsServiceId !== 0) {
-          Remote.getTTSServiceInfo(r.data.data.ttsServiceId).then(r => {
-            if (r.status) {
-              setUseTTSService(r.data.data)
-            }
-          })
+        if (r.data.data.AIDubUseModel !== "None") {
+          setUseTTSModel(r.data.data.AIDubUseModel)
+          console.log(r.data.data.AIDubUseModel)
         } else {
-          setUseTTSService({
-            id: 0,
-            name: "None",
-            description: "Do not use TTS service during conversation"
-          })
+          setUseTTSModel("None")
         }
         setTimeout(() => { setInitialized(true) }, 100)
       } else {
@@ -72,8 +66,8 @@ function CharacterEdit({ id, charNameInit }) {
     refreshCharInfo()
   }, [id, charName])
 
-  let submitChange = (charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSService) => {
-    Remote.editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSService).then(r => {
+  let submitChange = (charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel) => {
+    Remote.editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel).then(r => {
       if (r.status) {
         setMessageTitle('Success')
         setMessageContent('Character information updated successfully')
@@ -110,7 +104,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={charName}
           onOk={(v) => {
             setCharName(v)
-            submitChange(v, charPrompt, pastMemories, exampleChats, useStickerSet.id, useTTSService.id)
+            submitChange(v, charPrompt, pastMemories, exampleChats, useStickerSet.id, useTTSModel)
           }}
         />
         <ContentEditDialog
@@ -120,7 +114,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={charPrompt}
           onOk={(v) => {
             setCharPrompt(v)
-            submitChange(charName, v, pastMemories, exampleChats, useStickerSet.id, useTTSService.id)
+            submitChange(charName, v, pastMemories, exampleChats, useStickerSet.id, useTTSModel)
           }}
         />
         <ContentEditDialog
@@ -130,7 +124,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={pastMemories}
           onOk={(v) => {
             setPastMemories(v)
-            submitChange(charName, charPrompt, v, exampleChats, useStickerSet.id, useTTSService.id)
+            submitChange(charName, charPrompt, v, exampleChats, useStickerSet.id, useTTSModel)
           }}
         />
         <ContentEditDialog
@@ -140,12 +134,12 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={exampleChats}
           onOk={(v) => {
             setExampleChats(v)
-            submitChange(charName, charPrompt, pastMemories, v, useStickerSet.id, useTTSService.id)
+            submitChange(charName, charPrompt, pastMemories, v, useStickerSet.id, useTTSModel)
           }}
         />
-        <TTSServiceSelector
-          onChange={(v) => { setUseTTSService(v); submitChange(charName, charPrompt, pastMemories, exampleChats, useStickerSet.id, v.id) }}
-          defaultValue={useTTSService}
+        <TTSModelSelector
+          onChange={(v) => { setUseTTSModel(v); submitChange(charName, charPrompt, pastMemories, exampleChats, useStickerSet.id, v) }}
+          defaultValue={useTTSModel}
           onErr={(e) => {
             setMessageType('error')
             setMessageTitle('Error')
@@ -154,7 +148,7 @@ function CharacterEdit({ id, charNameInit }) {
           }}
         />
         <StickerSetSelector
-          onChange={(v) => { setUseStickerSet(v); submitChange(charName, charPrompt, pastMemories, exampleChats, v.id, useTTSService.id) }}
+          onChange={(v) => { setUseStickerSet(v); submitChange(charName, charPrompt, pastMemories, exampleChats, v.id, useTTSModel) }}
           defaultValue={useStickerSet}
           onErr={(e) => {
             setMessageType('error')

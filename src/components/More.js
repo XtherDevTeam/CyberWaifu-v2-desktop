@@ -14,6 +14,7 @@ function More() {
   const [messageOpen, setMessageOpen] = React.useState(false)
   const [userPersona, setUserPersona] = React.useState('')
   const [userName, setUserName] = React.useState('')
+  const [gptSoVitsMiddlewareApiUrl, setGptSoVitsMiddlewareApiUrl] = React.useState('')
   const [showAboutPage, setShowAboutPage] = React.useState(false)
 
   function handleServiceInfoRefresh() {
@@ -22,6 +23,7 @@ function More() {
       if (r.data.status) {
         setUserPersona(r.data.data.user_persona)
         setUserName(r.data.data.session_username)
+        setGptSoVitsMiddlewareApiUrl(r.data.data.gpt_sovits_middleware_url)
       } else {
         setMessageTitle('Error')
         setMessageContent(r.data.message)
@@ -75,6 +77,23 @@ function More() {
           })
           setUserPersona(value)
         }} icon={<icons.Badge />} />
+        <ContentEditDialog title="GPT-SoVits Middleware API URL" description={'Set the URL of the GPT-SoVits middleware API.'} defaultValue={gptSoVitsMiddlewareApiUrl} onOk={(value) => {
+          setGptSoVitsMiddlewareApiUrl(value)
+          Remote.setMiddlewareUrl(value).then(r => {
+            console.log(r)
+            if (r.data.status) {
+              setMessageTitle('Success')
+              setMessageContent('GPT-SoVits middleware API URL updated successfully.')
+              setMessageType('success')
+              setMessageOpen(true)
+            } else {
+              setMessageTitle('Error')
+              setMessageContent(r.data.message)
+              setMessageType('error')
+              setMessageOpen(true)
+            }
+          })
+        }} icon={<icons.Cloud />} />
         <mui.ListItemButton onClick={() => {
           setShowAboutPage(true)
         }}>
