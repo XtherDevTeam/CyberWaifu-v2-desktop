@@ -21,7 +21,8 @@ function NotConfigured() {
 
 
 function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
-  const [name, setName] = React.useState('');
+  const [names, setNames] = React.useState([]);
+  const [editingName, setEditingName] = React.useState('');
   const [sourcesToFetch, setSourcesToFetch] = React.useState([]);
   const [editingSource, setEditingSource] = React.useState(null);
 
@@ -29,7 +30,33 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
     <mui.DialogTitle>Add New Character</mui.DialogTitle>
     <mui.DialogContent sx={{ minWidth: '40vw' }}>
       <div style={{ marginTop: 10 }}></div>
-      <mui.TextField fullWidth label="Character Name" value={name} onChange={(e) => setName(e.target.value)}></mui.TextField>
+      <mui.TextField fullWidth label="Character Name" value={editingName} onChange={(e) => setEditingName(e.target.value)}></mui.TextField>
+      <mui.Button
+        onClick={() => {
+          if (editingName) {
+            setSourcesToFetch([...sourcesToFetch, editingName])
+            setEditingName("")
+          } else {
+            onErr('Please enter a name for the character')
+          }
+        }}
+        edge="end"
+        variant="contained"
+        startIcon={<icons.Add />}
+        fullWidth
+        style={{ marginTop: 5 }}
+      >
+        Add Character
+      </mui.Button>
+      <mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }}>
+        {sourcesToFetch.map((source, index) => <mui.ListItem key={index}>
+          <mui.ListItemText primary={source} />
+          <mui.IconButton onClick={() => {
+            setNames(names.filter((_, i) => i !== index))
+            setEditingName(null)
+          }}><icons.Delete /></mui.IconButton>
+        </mui.ListItem>)}
+      </mui.List>
       <mui.Box style={{ marginTop: 10 }}>
         <mui.TextField
           fullWidth
