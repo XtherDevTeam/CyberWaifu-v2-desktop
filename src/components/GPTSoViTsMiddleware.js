@@ -101,7 +101,7 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
       <mui.Button onClick={() => {
         onOk({ names, sourcesToFetch })
         onClose()
-      }} disabled={!name || sourcesToFetch.length === 0}>Add</mui.Button>
+      }} disabled={names.length === 0 || sourcesToFetch.length === 0}>Add</mui.Button>
     </mui.DialogActions>
   </mui.Dialog>
 }
