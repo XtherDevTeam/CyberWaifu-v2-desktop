@@ -34,7 +34,7 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
       <mui.Button
         onClick={() => {
           if (editingName) {
-            setSourcesToFetch([...sourcesToFetch, editingName])
+            setNames([...names, editingName])
             setEditingName("")
           } else {
             onErr('Please enter a name for the character')
