@@ -99,7 +99,7 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
         onClose()
       }}>Cancel</mui.Button>
       <mui.Button onClick={() => {
-        onOk({ name, sourcesToFetch })
+        onOk({ names, sourcesToFetch })
         onClose()
       }} disabled={!name || sourcesToFetch.length === 0}>Add</mui.Button>
     </mui.DialogActions>
@@ -261,7 +261,7 @@ function PanelModels({ middlewareInfo, raiseMessage }) {
     <AddNewCharacterDialog
       open={addNewCharacterOpen}
       onOk={(data) => {
-        Api.runTraining([data.name], data.sourcesToFetch).then(r => {
+        Api.runTraining(data.names, data.sourcesToFetch).then(r => {
           if (r.data.status) {
             raiseMessage('Success', `Training task for ${data.name} submitted successfully`, 'success')
           } else {
