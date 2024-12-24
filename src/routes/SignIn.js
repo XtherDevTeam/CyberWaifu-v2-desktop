@@ -18,6 +18,7 @@ function getWindowDimensions() {
 function SignIn() {
   const navigate = useNavigate()
   const [serverUrl, setServerUrl] = React.useState('')
+  const [serviceInfo, setServiceInfo] = React.useState(null)
   const [stage, setStage] = React.useState(0)
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -43,6 +44,21 @@ function SignIn() {
   const handleFirstStage = () => {
     Remote.checkIfInitialized().then(r => {
       if (r) {
+        Remote.getServiceInfo().then(r => {
+          if (r.data.status) {
+            setServiceInfo(r.data.data)
+          } else {
+            setMessageTitle('Error')
+            setMessageContent(r.data.data)
+            setMessageType('error')
+            setMessageOpen(true)
+          }
+        }).catch(e => {
+          setMessageTitle('Error')
+          setMessageContent(e.message)
+          setMessageType('error')
+          setMessageOpen(true)
+        })
         Remote.getUserName().then(r => {
           setUsername(r)
           setStage(1)
@@ -65,28 +81,35 @@ function SignIn() {
   }
 
   const handleSecondStage = () => {
-    Remote.signIn(password).then(r => {
-      if (r.data.status) {
-        setTimeout(() => {
-          window.api.invoke('resize-window-normal')
-          navigate('/')
-        }, 1000)
-        setMessageTitle('Success')
-        setMessageContent('Signed in successfully, redirecting...')
-        setMessageType('success')
-        setMessageOpen(true)
-      } else {
-        setMessageTitle('Error')
-        setMessageContent(r.data.data)
-        setMessageType('error')
-        setMessageOpen(true)
-      }
-    }).catch(e => {
+    if (serviceInfo.api_ver === 'v1') {
       setMessageTitle('Error')
-      setMessageContent(e.message)
+      setMessageContent('Outdated remote service version, cannot connect to server.')
       setMessageType('error')
       setMessageOpen(true)
-    })
+    } else {
+      Remote.signIn(password).then(r => {
+        if (r.data.status) {
+          setTimeout(() => {
+            window.api.invoke('resize-window-normal')
+            navigate('/')
+          }, 1000)
+          setMessageTitle('Success')
+          setMessageContent('Signed in successfully, redirecting...')
+          setMessageType('success')
+          setMessageOpen(true)
+        } else {
+          setMessageTitle('Error')
+          setMessageContent(r.data.data)
+          setMessageType('error')
+          setMessageOpen(true)
+        }
+      }).catch(e => {
+        setMessageTitle('Error')
+        setMessageContent(e.message)
+        setMessageType('error')
+        setMessageOpen(true)
+      })
+    }
   }
 
   return (

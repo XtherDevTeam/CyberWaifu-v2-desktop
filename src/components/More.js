@@ -98,7 +98,7 @@ function More() {
           setShowAboutPage(true)
         }}>
           <mui.ListItemIcon><icons.Info /></mui.ListItemIcon>
-          <mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.0.0(1)" />
+          <mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.2.0(2)" />
         </mui.ListItemButton>
       </mui.List>
     </mui.Box>

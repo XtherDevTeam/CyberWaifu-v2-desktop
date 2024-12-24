@@ -10,7 +10,7 @@ function About({onClose}) {
       CyberWaifu-V2 Desktop
     </mui.Typography>
     <mui.Typography variant="body1" style={{ marginTop: 10 }}>
-      Version 1.0.0 (1)
+      Version 1.2.0 (2)
     </mui.Typography>
     <mui.Typography variant="body1" style={{ marginTop: 10 }}>
       A cross-platform desktop client for CyberWaifu-V2
