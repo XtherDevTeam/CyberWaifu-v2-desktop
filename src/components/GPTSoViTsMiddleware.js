@@ -49,8 +49,8 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
         Add Character
       </mui.Button>
       <mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }}>
-        {sourcesToFetch.map((source, index) => <mui.ListItem key={index}>
-          <mui.ListItemText primary={source} />
+        {names.map((name, index) => <mui.ListItem key={index}>
+          <mui.ListItemText primary={name} />
           <mui.IconButton onClick={() => {
             setNames(names.filter((_, i) => i !== index))
             setEditingName(null)

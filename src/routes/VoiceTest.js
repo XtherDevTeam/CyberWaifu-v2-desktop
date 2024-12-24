@@ -16,8 +16,8 @@ import theme from '../shared/theme';
 
 function VoiceChat() {
   const [accessToken, setAccessToken] = React.useState('')
-  const [remoteUrl, setRemoteUrl] = React.useState('')
-  const [sessionName, setSessionName] = React.useState('')
+  const [remoteUrl, setRemoteUrl] = React.useState('www.xiaokang00010.top:6212')
+  const [sessionName, setSessionName] = React.useState('testroom')
 
   // alert api
   const [messageTitle, setMessageTitle] = React.useState('')
@@ -31,32 +31,32 @@ function VoiceChat() {
 
 
   React.useEffect(() => {
-    const p = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf('?')));
-    console.log('called')
-    if (!p.get('charName')) {
-      setMessageTitle('Error')
-      setMessageContent('Invalid URL')
-      setMessageType('error')
-      setMessageOpen(true)
-      return
-    }
-    Remote.rtVcEstablish(p.get('charName')).then(data => {
-      if (data.data.status) {
-        setAccessToken(data.data.data.token)
-        setRemoteUrl(data.data.data.url)
-        setSessionName(data.data.data.session)
-      } else {
-        setMessageTitle('Error')
-        setMessageContent(data.data.data)
-        setMessageType('error')
-        setMessageOpen(true)
-      }
-    }).catch(err => {
-      setMessageTitle('Error')
-      setMessageContent(err.message)
-      setMessageType('error')
-      setMessageOpen(true)
-    })
+    // const p = new URLSearchParams(window.location.hash.substring(window.location.hash.indexOf('?')));
+    // console.log('called')
+    // if (!p.get('charName')) {
+    //   setMessageTitle('Error')
+    //   setMessageContent('Invalid URL')
+    //   setMessageType('error')
+    //   setMessageOpen(true)
+    //   return
+    // }
+    // Remote.rtVcEstablish(p.get('charName')).then(data => {
+    //   if (data.data.status) {
+    //     setAccessToken(data.data.data.token)
+    //     setRemoteUrl(data.data.data.url)
+    //     setSessionName(data.data.data.session)
+    //   } else {
+    //     setMessageTitle('Error')
+    //     setMessageContent(data.data.data)
+    //     setMessageType('error')
+    //     setMessageOpen(true)
+    //   }
+    // }).catch(err => {
+    //   setMessageTitle('Error')
+    //   setMessageContent(err.message)
+    //   setMessageType('error')
+    //   setMessageOpen(true)
+    // })
 
   }, [])
 
@@ -99,15 +99,9 @@ function VoiceChat() {
         setConnect(false)
       }}
       audio={true}
-      video={{
-        resolution: {
-          width: 1280,
-          height: 720,
-          frameRate: 10,
-        } 
-      }}
+      video={true}
     >
-      <VideoConference></VideoConference>
+      <VideoConference ></VideoConference>
     </LiveKitRoom>
   </mui.Box>
 }

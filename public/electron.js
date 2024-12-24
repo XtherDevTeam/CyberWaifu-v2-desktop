@@ -36,6 +36,7 @@ function createWindow() {
   if (process.env.YOIMIYA === 'development') {
     mainWindow.webContents.openDevTools()
     mainWindow.loadURL('http://localhost:3000')
+    // mainWindow.loadURL(`http://localhost:3000#/voice_test`)
   } else {
     mainWindow.loadURL(url.format({
       pathname: path.join(__dirname, 'index.html'),

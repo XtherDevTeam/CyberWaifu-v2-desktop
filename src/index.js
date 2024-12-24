@@ -20,6 +20,7 @@ import reportWebVitals from './reportWebVitals';
 import Home from './routes/Home';
 import SignIn from './routes/SignIn';
 import VoiceChat from './routes/VoiceChat';
+import VoiceTest from './routes/VoiceTest';
 import theme from './shared/theme';
 
 const router = createHashRouter([
@@ -34,6 +35,10 @@ const router = createHashRouter([
   {
     path: '/voice_chat',
     element: <VoiceChat />,
+  },
+  {
+    path: '/voice_test',
+    element: <VoiceTest />,
   },
   {
     path: '*',
