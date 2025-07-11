@@ -10,7 +10,7 @@ import usePrefersColorScheme from 'use-prefers-color-scheme';
 
 import fs from '../shared/fs';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 import AudioMessagesView from './AudioMessagesView';
@@ -403,13 +403,13 @@ function ChatroomView({ id, charName }) {
   }
 
   return (
-    <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+    <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
-      <mui.Box ref={chatHistoryViewRef} data-overlayscrollbars-initialize height={messageViewHeight} sx={{ paddingRight: 30 }} overflow={'scroll'}>
-        <mui.Box ref={dummyLoadingRef} sx={{ display: isInitializing ? 'none' : 'block' }} display={'flex'} width={'100%'}></mui.Box>
-        <mui.Box height={'10vh'}></mui.Box>
+      <Mui.Box ref={chatHistoryViewRef} data-overlayscrollbars-initialize height={messageViewHeight} sx={{ paddingRight: 30 }} overflow={'scroll'}>
+        <Mui.Box ref={dummyLoadingRef} sx={{ display: isInitializing ? 'none' : 'block' }} display={'flex'} width={'100%'}></Mui.Box>
+        <Mui.Box height={'10vh'}></Mui.Box>
         <PhotoProvider>
-          {chatHistoryView.map((v, k) => <mui.Box key={v.id} style={{
+          {chatHistoryView.map((v, k) => <Mui.Box key={v.id} style={{
             display: 'flex',
             flexDirection: 'row',
             width: '100%',
@@ -418,41 +418,41 @@ function ChatroomView({ id, charName }) {
           }}>
             {(v.role.startsWith('model')) && (
               <>
-                <mui.Avatar style={{ marginRight: 10 }} src={Remote.charAvatar(id)}></mui.Avatar>
-                <mui.Box style={{ flexDirection: 'column', maxWidth: '50vw' }}>
-                  <mui.Typography variant='body2' style={{ marginBottom: 5, textAlign: 'left' }}>{charName}</mui.Typography>
+                <Mui.Avatar style={{ marginRight: 10 }} src={Remote.charAvatar(id)}></Mui.Avatar>
+                <Mui.Box style={{ flexDirection: 'column', maxWidth: '50vw' }}>
+                  <Mui.Typography variant='body2' style={{ marginBottom: 5, textAlign: 'left' }}>{charName}</Mui.Typography>
                   {v.type == 0 &&
-                    <mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
-                      <mui.Typography variant='body2'>{buildTextView(availableStickers.map(r => r.name), v.text)}</mui.Typography>
-                    </mui.Paper>
+                    <Mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
+                      <Mui.Typography variant='body2'>{buildTextView(availableStickers.map(r => r.name), v.text)}</Mui.Typography>
+                    </Mui.Paper>
                   }
                   {v.type == 2 && <AudioMessagesView audioUrl={Remote.attachmentDownload(v.text)} />}
-                </mui.Box>
+                </Mui.Box>
               </>)}
             {(v.role.startsWith('user')) && (
               <>
-                <mui.Box style={{ flexDirection: 'column', maxWidth: '50vw' }}>
-                  <mui.Typography variant='body2' style={{ marginBottom: 5, textAlign: 'right' }}>{sessionUsername}</mui.Typography>
+                <Mui.Box style={{ flexDirection: 'column', maxWidth: '50vw' }}>
+                  <Mui.Typography variant='body2' style={{ marginBottom: 5, textAlign: 'right' }}>{sessionUsername}</Mui.Typography>
                   {v.type == 0 &&
-                    <mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
-                      <mui.Typography variant='body2'>{buildTextView(availableStickers.map(r => r.name), v.text)}</mui.Typography>
-                    </mui.Paper>
+                    <Mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
+                      <Mui.Typography variant='body2'>{buildTextView(availableStickers.map(r => r.name), v.text)}</Mui.Typography>
+                    </Mui.Paper>
                   }
                   {v.type == 1 && <PhotoView key={k} src={Remote.attachmentDownload(v.text)}><img src={Remote.attachmentDownload(v.text)} style={{ maxHeight: '20vh', width: 'auto', borderRadius: 10 }}></img></PhotoView>}
                   {v.type == 2 && <AudioMessagesView audioUrl={Remote.attachmentDownload(v.text)} />}
-                </mui.Box>
-                <mui.Avatar style={{ marginLeft: 10 }} src={Remote.getAvatar()}></mui.Avatar>
+                </Mui.Box>
+                <Mui.Avatar style={{ marginLeft: 10 }} src={Remote.getAvatar()}></Mui.Avatar>
               </>)}
-          </mui.Box>)}
+          </Mui.Box>)}
         </PhotoProvider>
-        <mui.Box ref={dummyMsgRef} style={{ height: 0, width: 0, opacity: 0 }}></mui.Box>
-      </mui.Box>
-      <mui.Grid ref={toolbarRef} container sx={{ width: 'calc(70vw - 30px)', position: 'absolute', bottom: 0, backgroundColor: scheme == 'light' ? theme.light.palette.surface.main : theme.dark.palette.surface.main }} >
-        <mui.Grid item xs={12} sx={{ paddingY: 10 }}>
-          {isReceivingMessage && <mui.Typography variant='body2'><b>{charName}</b> is typing...</mui.Typography>}
-        </mui.Grid>
-        <mui.Grid item xs={8}>
-          <mui.TextField ref={chatMessageInputRef}
+        <Mui.Box ref={dummyMsgRef} style={{ height: 0, width: 0, opacity: 0 }}></Mui.Box>
+      </Mui.Box>
+      <Mui.Grid ref={toolbarRef} container sx={{ width: 'calc(70vw - 30px)', position: 'absolute', bottom: 0, backgroundColor: scheme == 'light' ? theme.light.palette.surface.main : theme.dark.palette.surface.main }} >
+        <Mui.Grid item xs={12} sx={{ paddingY: 10 }}>
+          {isReceivingMessage && <Mui.Typography variant='body2'><b>{charName}</b> is typing...</Mui.Typography>}
+        </Mui.Grid>
+        <Mui.Grid item xs={8}>
+          <Mui.TextField ref={chatMessageInputRef}
             onFocus={() => {
               discardPendingMessageTimer()
               if (chatSession.current) {
@@ -482,11 +482,11 @@ function ChatroomView({ id, charName }) {
             value={chatMessageInput} onChange={(e) => {
               setChatMessageInput(e.target.value)
               updateCursurPosition()
-            }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></mui.TextField>
-        </mui.Grid>
-        <mui.Grid item xs={4}>
-          <mui.Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', alignSelf: 'center', width: '100%' }}>
-            <mui.IconButton color='primary' variant='contained' onClick={(e) => {
+            }} sx={{ width: '100%' }} variant='standard' multiline maxRows={4} label={''} placeholder='Type a message...' ></Mui.TextField>
+        </Mui.Grid>
+        <Mui.Grid item xs={4}>
+          <Mui.Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', alignSelf: 'center', width: '100%' }}>
+            <Mui.IconButton color='primary' variant='contained' onClick={(e) => {
               setIsStickerPickerOpen(!isStickerPickerOpen)
               setStickerPickerAnchorEl(e.currentTarget)
             }}>
@@ -504,16 +504,16 @@ function ChatroomView({ id, charName }) {
                 }, 200)
                 setChatMessageInput(newText)
               }} />
-            </mui.IconButton>
-            <mui.IconButton color='primary' variant='contained' onClick={() => addAttachment()} >
+            </Mui.IconButton>
+            <Mui.IconButton color='primary' variant='contained' onClick={() => addAttachment()} >
               <icons.Attachment />
-            </mui.IconButton>
-            <mui.IconButton color='primary' variant='contained' onClick={() => {
+            </Mui.IconButton>
+            <Mui.IconButton color='primary' variant='contained' onClick={() => {
               window.api.invoke('create-voice-chat-window', charName)
             }} >
               <icons.VoiceChat />
-            </mui.IconButton>
-            <mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
+            </Mui.IconButton>
+            <Mui.Button variant='contained' startIcon={<icons.Send />} onClick={() => {
               uploadAllAttachment().then(() => {
                 buildMessageChain(chatMessageInput, chatFiles.current)
               }).catch(r => {
@@ -525,27 +525,27 @@ function ChatroomView({ id, charName }) {
               chatFiles.current = []
             }}>
               Send
-            </mui.Button>
-          </mui.Box>
-        </mui.Grid>
-        <mui.Grid item xs={12}>
-          {chatFilesView.length !== 0 && <mui.List sx={{ width: '100%', paddingY: 10, maxHeight: '30vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
-            {chatFilesView.map((v, k) => <mui.ListItem key={k}>
-              <mui.ListItemIcon>
+            </Mui.Button>
+          </Mui.Box>
+        </Mui.Grid>
+        <Mui.Grid item xs={12}>
+          {chatFilesView.length !== 0 && <Mui.List sx={{ width: '100%', paddingY: 10, maxHeight: '30vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
+            {chatFilesView.map((v, k) => <Mui.ListItem key={k}>
+              <Mui.ListItemIcon>
                 {v.type.startsWith('audio/') && <icons.VoiceChat />}
-                {v.type.startsWith('image/') && <mui.Avatar src={URL.createObjectURL(v)} sx={{ width: 24, height: 24 }}></mui.Avatar>}
-              </mui.ListItemIcon>
-              <mui.ListItemText primary={v.name} secondary={v.type.startsWith('audio/') ? 'Voice message' : 'Image attachment'} />
-              <mui.ListItemSecondaryAction>
-                <mui.IconButton color='primary' edge='end' onClick={() => {
+                {v.type.startsWith('image/') && <Mui.Avatar src={URL.createObjectURL(v)} sx={{ width: 24, height: 24 }}></Mui.Avatar>}
+              </Mui.ListItemIcon>
+              <Mui.ListItemText primary={v.name} secondary={v.type.startsWith('audio/') ? 'Voice message' : 'Image attachment'} />
+              <Mui.ListItemSecondaryAction>
+                <Mui.IconButton color='primary' edge='end' onClick={() => {
                   setChatFilesView([...chatFilesView.slice(0, k), ...chatFilesView.slice(k + 1)])
-                }}><icons.Delete /></mui.IconButton>
-              </mui.ListItemSecondaryAction>
-            </mui.ListItem>)}
-          </mui.List>}
-        </mui.Grid>
-      </mui.Grid>
-    </mui.Box >
+                }}><icons.Delete /></Mui.IconButton>
+              </Mui.ListItemSecondaryAction>
+            </Mui.ListItem>)}
+          </Mui.List>}
+        </Mui.Grid>
+      </Mui.Grid>
+    </Mui.Box >
   )
 }
 

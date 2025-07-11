@@ -10,7 +10,7 @@ import {
 } from '@livekit/components-react';
 
 import Message from '../components/Message';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 
@@ -87,7 +87,7 @@ function VoiceChat() {
     }
   }, [connect])
 
-  return <mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
+  return <Mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
     <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
     <LiveKitRoom data-lk-theme="default" options={{
       publishDefaults: {
@@ -109,7 +109,7 @@ function VoiceChat() {
     >
       <VideoConference></VideoConference>
     </LiveKitRoom>
-  </mui.Box>
+  </Mui.Box>
 }
 
 export default VoiceChat

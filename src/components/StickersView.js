@@ -2,7 +2,7 @@ import React from 'react';
 
 import fs from '../shared/fs';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import Message from './Message';
 
@@ -11,14 +11,14 @@ function AddStickerDialog({ state, onOk, onCancel, set }) {
   const [stickerUrl, setStickerUrl] = React.useState(Remote.stickerGet(set.id, set.previewSticker))
   const [stickerFileObject, setStickerFileObject] = React.useState(null)
 
-  return <><mui.Dialog open={state} onClose={onCancel}>
-    <mui.DialogTitle>Add Sticker</mui.DialogTitle>
-    <mui.DialogContent style={{ minWidth: window.innerWidth * 0.5, maxHeight: '50vh' }}>
-      <mui.TextField style={{ marginTop: 10 }} label="Sticker Name" fullWidth value={stickerName} onChange={(e) => setStickerName(e.target.value)}></mui.TextField>
+  return <><Mui.Dialog open={state} onClose={onCancel}>
+    <Mui.DialogTitle>Add Sticker</Mui.DialogTitle>
+    <Mui.DialogContent style={{ minWidth: window.innerWidth * 0.5, maxHeight: '50vh' }}>
+      <Mui.TextField style={{ marginTop: 10 }} label="Sticker Name" fullWidth value={stickerName} onChange={(e) => setStickerName(e.target.value)}></Mui.TextField>
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
         <img src={stickerUrl} style={{ width: 50, height: 'auto', borderRadius: 25 }}></img>
       </div>
-      <mui.Button fullWidth style={{ marginTop: 10 }} startIcon={<icons.Image></icons.Image>} color='primary' variant='contained' onClick={() => {
+      <Mui.Button fullWidth style={{ marginTop: 10 }} startIcon={<icons.Image></icons.Image>} color='primary' variant='contained' onClick={() => {
         fs.launchImagePickerAsync(false).then(files => {
           console.log(files)
           setStickerFileObject(files[0])
@@ -26,15 +26,15 @@ function AddStickerDialog({ state, onOk, onCancel, set }) {
         }).catch(e => {
           console.log(e)
         })
-      }}>Pick one from local</mui.Button>
-    </mui.DialogContent>
-    <mui.DialogActions>
-      <mui.Button onClick={onCancel}>Cancel</mui.Button>
-      <mui.Button onClick={() => {
+      }}>Pick one from local</Mui.Button>
+    </Mui.DialogContent>
+    <Mui.DialogActions>
+      <Mui.Button onClick={onCancel}>Cancel</Mui.Button>
+      <Mui.Button onClick={() => {
         onOk(stickerName, stickerUrl, stickerFileObject)
-      }}>Add</mui.Button>
-    </mui.DialogActions>
-  </mui.Dialog></>
+      }}>Add</Mui.Button>
+    </Mui.DialogActions>
+  </Mui.Dialog></>
 }
 
 function StickerSetEdit({ state, setId, onOk, onCancel }) {
@@ -84,7 +84,7 @@ function StickerSetEdit({ state, setId, onOk, onCancel }) {
     }
   }, [setId])
 
-  return <mui.Dialog open={state} onClose={onCancel}>
+  return <Mui.Dialog open={state} onClose={onCancel}>
     <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
     <AddStickerDialog state={addStickerDialogState} set={addStickerDialogSet} onOk={(stickerName, stickerUrl, stickerFileObject) => {
       URL.revokeObjectURL(stickerUrl)
@@ -109,13 +109,13 @@ function StickerSetEdit({ state, setId, onOk, onCancel }) {
       setAddStickerDialogStatus(false)
     }}></AddStickerDialog>
 
-    <mui.DialogTitle>Edit Sticker Set</mui.DialogTitle>
-    <mui.DialogContent style={{ minWidth: window.innerWidth * 0.5, maxHeight: '50vh', display: 'flex', flexDirection: 'column' }}>
-      <mui.TextField label="Sticker Set Name" fullWidth value={name} style={{ marginTop: 10 }} onChange={(e) => setName(e.target.value)}></mui.TextField>
+    <Mui.DialogTitle>Edit Sticker Set</Mui.DialogTitle>
+    <Mui.DialogContent style={{ minWidth: window.innerWidth * 0.5, maxHeight: '50vh', display: 'flex', flexDirection: 'column' }}>
+      <Mui.TextField label="Sticker Set Name" fullWidth value={name} style={{ marginTop: 10 }} onChange={(e) => setName(e.target.value)}></Mui.TextField>
 
-      <mui.Typography style={{ marginTop: 10 }} variant='subtitle2'>Available Stickers ({stickers.length})</mui.Typography>
-      <mui.List style={{ flex: 1, overflowY: 'auto' }} data-overlayscrollbars-initialize>
-        {stickers.map((sticker, index) => <mui.ListItem style={{marginTop: 10, marginBottom: 10}} key={`stk-${index}`} secondaryAction={<mui.IconButton color='secondary' onClick={() => {
+      <Mui.Typography style={{ marginTop: 10 }} variant='subtitle2'>Available Stickers ({stickers.length})</Mui.Typography>
+      <Mui.List style={{ flex: 1, overflowY: 'auto' }} data-overlayscrollbars-initialize  class='scroll-container'>
+        {stickers.map((sticker, index) => <Mui.ListItem style={{marginTop: 10, marginBottom: 10}} key={`stk-${index}`} secondaryAction={<Mui.IconButton color='secondary' onClick={() => {
           Remote.deleteSticker(sticker.id).then(r => {
             if (r.data.status) {
               setMessageTitle('Success')
@@ -132,27 +132,27 @@ function StickerSetEdit({ state, setId, onOk, onCancel }) {
           })
         }}>
           <icons.Delete></icons.Delete>
-        </mui.IconButton>}>
-          <mui.ListItemIcon>
+        </Mui.IconButton>}>
+          <Mui.ListItemIcon>
             <img src={Remote.stickerGet(set.id, sticker.name)} style={{ width: 50, height: 'auto', borderRadius: 25 }}></img>
-          </mui.ListItemIcon>
-          <mui.ListItemText style={{ marginLeft: 10 }} primary={sticker.name} />
-        </mui.ListItem>)}
-      </mui.List>
-      <mui.Button style={{ marginTop: 10 }} startIcon={<icons.Add></icons.Add>} color='primary' variant='contained' onClick={() => {
+          </Mui.ListItemIcon>
+          <Mui.ListItemText style={{ marginLeft: 10 }} primary={sticker.name} />
+        </Mui.ListItem>)}
+      </Mui.List>
+      <Mui.Button style={{ marginTop: 10 }} startIcon={<icons.Add></icons.Add>} color='primary' variant='contained' onClick={() => {
         setAddStickerDialogStatus(true)
         setAddStickerDialogSet(set)
       }}>
         Add Sticker
-      </mui.Button>
-    </mui.DialogContent>
-    <mui.DialogActions>
-      <mui.Button onClick={onCancel}>Cancel</mui.Button>
-      <mui.Button onClick={() => {
+      </Mui.Button>
+    </Mui.DialogContent>
+    <Mui.DialogActions>
+      <Mui.Button onClick={onCancel}>Cancel</Mui.Button>
+      <Mui.Button onClick={() => {
         onOk(name)
-      }}>Edit</mui.Button>
-    </mui.DialogActions>
-  </mui.Dialog>
+      }}>Edit</Mui.Button>
+    </Mui.DialogActions>
+  </Mui.Dialog>
 }
 
 function StickersView() {
@@ -177,8 +177,8 @@ function StickersView() {
       }
     })
   }, [])
-  return <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
-    <mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}>
+  return <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+    <Mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}  class='scroll-container'>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       <StickerSetEdit state={stickerEditDialogStatus} setId={stickerEditDialogStickerSetId} onOk={(v) => {
         Remote.renameStickerSet(stickerEditDialogStickerSetId, v).then(r => {
@@ -200,8 +200,8 @@ function StickersView() {
         setStickerEditDialogStatus(false)
         setStickerEditDialogStickerSetId(null)
       }} />
-      <mui.List style={{ marginTop: 30 }}>
-        {stickerSets.map((set, index) => <mui.ListItem><mui.ListItemButton
+      <Mui.List style={{ marginTop: 30 }}>
+        {stickerSets.map((set, index) => <Mui.ListItem><Mui.ListItemButton
           key={index}
           onClick={() => {
             // toggle sticker set edit dialog
@@ -209,15 +209,15 @@ function StickersView() {
             setStickerEditDialogStickerSetId(set.id)
           }}
         >
-          <mui.ListItemIcon>
+          <Mui.ListItemIcon>
             <img src={Remote.stickerGet(set.id, set.previewSticker)} style={{ width: 50, height: 50, borderRadius: 25 }}></img>
-          </mui.ListItemIcon>
-          <mui.ListItemText style={{ marginLeft: 10 }} primary={set.setName} />
-        </mui.ListItemButton>
-        </mui.ListItem>)}
-      </mui.List>
-    </mui.Box>
-  </mui.Box>;
+          </Mui.ListItemIcon>
+          <Mui.ListItemText style={{ marginLeft: 10 }} primary={set.setName} />
+        </Mui.ListItemButton>
+        </Mui.ListItem>)}
+      </Mui.List>
+    </Mui.Box>
+  </Mui.Box>;
 }
 
 export default StickersView;

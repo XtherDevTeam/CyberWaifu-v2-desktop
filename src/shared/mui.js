@@ -1,3 +1,6 @@
-import * as mui from '@mui/material';
+import * as _Mui from '@mui/material';
+import * as Icons from '@mui/icons-material'
 
-export default mui
+let Mui = {..._Mui, Icons}
+
+export default Mui

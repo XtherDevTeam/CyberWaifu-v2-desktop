@@ -3,7 +3,7 @@ import React from 'react';
 import usePrefersColorScheme from 'use-prefers-color-scheme';
 
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import theme from '../shared/theme';
 
 function AudioMessagesView({ audioUrl }) {
@@ -35,9 +35,9 @@ function AudioMessagesView({ audioUrl }) {
     }
   }, [audioUrl])
 
-  return (<mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
-    <mui.Box display="flex" width={"100%"} flexDirection={"row"} alignItems="center">
-      <mui.IconButton size='small' color="primary" onClick={() => {
+  return (<Mui.Paper elevation={3} style={{ padding: 10, borderRadius: 10, backgroundColor: scheme == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
+    <Mui.Box display="flex" width={"100%"} flexDirection={"row"} alignItems="center">
+      <Mui.IconButton size='small' color="primary" onClick={() => {
         // toggle play/pause
         if (isPlaying) {
           audioRef.current.pause()
@@ -48,12 +48,12 @@ function AudioMessagesView({ audioUrl }) {
         }
       }}>
         {isPlaying ? <icons.Pause /> : <icons.PlayArrow />}
-      </mui.IconButton>
-      <mui.Typography variant="body2">
+      </Mui.IconButton>
+      <Mui.Typography variant="body2">
         {isPlaying ? `${Math.floor(progress)}s / ${Math.floor(duration)}s` : 'Voice'}
-      </mui.Typography>
-    </mui.Box>
-  </mui.Paper>)
+      </Mui.Typography>
+    </Mui.Box>
+  </Mui.Paper>)
 }
 
 export default AudioMessagesView

@@ -2,7 +2,7 @@ import React from 'react';
 import About from './About';
 import fs from '../shared/fs';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import Message from './Message';
 import ContentEditDialog from './ContentEditDialog';
@@ -39,10 +39,10 @@ function More() {
   }, [])
 
 
-  return <>{!showAboutPage && <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30, paddingRight: 30 }}>
-    <mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}>
+  return <>{!showAboutPage && <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30, paddingRight: 30 }}>
+    <Mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}  class='scroll-container'>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
-      <mui.List style={{ marginTop: 30 }}>
+      <Mui.List style={{ marginTop: 30 }}>
         <ContentEditDialog title="User Name" description={'Set a new user name'} defaultValue={userName} onOk={(value) => {
           setUserName(value)
           Remote.updateUserName(value).then(r => {
@@ -94,19 +94,19 @@ function More() {
             }
           })
         }} icon={<icons.Cloud />} />
-        <mui.ListItemButton onClick={() => {
+        <Mui.ListItemButton onClick={() => {
           setShowAboutPage(true)
         }}>
-          <mui.ListItemIcon><icons.Info /></mui.ListItemIcon>
-          <mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.2.0(2)" />
-        </mui.ListItemButton>
-      </mui.List>
-    </mui.Box>
-  </mui.Box>}
-    {showAboutPage && <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)' }}>
+          <Mui.ListItemIcon><icons.Info /></Mui.ListItemIcon>
+          <Mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.2.0(2)" />
+        </Mui.ListItemButton>
+      </Mui.List>
+    </Mui.Box>
+  </Mui.Box>}
+    {showAboutPage && <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)' }}>
       <About onClose={() => setShowAboutPage(false)} />
 
-    </mui.Box>}
+    </Mui.Box>}
   </>;
 }
 

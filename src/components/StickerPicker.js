@@ -1,11 +1,11 @@
 import React from 'react';
 
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 
 function StickerPicker({ useStickerSet, availableStickers, open, onClose, anchorEl }) {
   return (<>
-    <mui.Popover
+    <Mui.Popover
       anchorOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -19,21 +19,21 @@ function StickerPicker({ useStickerSet, availableStickers, open, onClose, anchor
       onClose={() => onClose()}
       elevation={1}
     >
-      <mui.Box sx={{maxHeight: '40vh', minHeigth: '20vh', overflowY: 'scroll', minWidth: '10vw', padding: 10}}>
-        <mui.List>
+      <Mui.Box sx={{maxHeight: '40vh', minHeigth: '20vh', overflowY: 'scroll', minWidth: '10vw', padding: 10}} class='scroll-container'>
+        <Mui.List>
           {availableStickers.map((sticker, k) => (
-            <mui.ListItemButton key={k} onClick={() => {
+            <Mui.ListItemButton key={k} onClick={() => {
               onClose(sticker.name)
             }}>
-              <mui.ListItemIcon>
-                <mui.Avatar src={Remote.stickerGet(useStickerSet, sticker.name)} sx={{width: 32, height: 32}}/>
-              </mui.ListItemIcon>
-              <mui.ListItemText primary={sticker.name} />
-            </mui.ListItemButton>
+              <Mui.ListItemIcon>
+                <Mui.Avatar src={Remote.stickerGet(useStickerSet, sticker.name)} sx={{width: 32, height: 32}}/>
+              </Mui.ListItemIcon>
+              <Mui.ListItemText primary={sticker.name} />
+            </Mui.ListItemButton>
           ))}
-        </mui.List>
-      </mui.Box>
-    </mui.Popover>
+        </Mui.List>
+      </Mui.Box>
+    </Mui.Popover>
   </>)
 }
 

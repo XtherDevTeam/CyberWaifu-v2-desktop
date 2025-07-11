@@ -10,12 +10,13 @@ import EmptyChatView from '../components/EmtryChatView';
 import Message from '../components/Message';
 import StickersView from '../components/StickersView';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import theme from '../shared/theme';
 import TTSServicesView from '../components/TTSServicesView';
 import More from '../components/More';
 import GPTSoViTsMiddleware from '../components/GPTSoViTsMiddleware';
+import Extensions from '../components/Extensions';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -27,18 +28,18 @@ function CreateStickerSetDialog({ state, onOk, onClose }) {
   const [messageOpen, setMessageOpen] = React.useState(false)
 
   return (
-    <mui.Dialog open={state} onClose={onClose}>
+    <Mui.Dialog open={state} onClose={onClose}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
-      <mui.DialogTitle>Create Sticker Set</mui.DialogTitle>
-      <mui.DialogContent>
-        <mui.DialogContentText>
+      <Mui.DialogTitle>Create Sticker Set</Mui.DialogTitle>
+      <Mui.DialogContent>
+        <Mui.DialogContentText>
           Think of the name for your sticker set. Hmm... How about "Naganohara Yoimiya"?
-        </mui.DialogContentText>
-        <mui.TextField style={{ marginTop: 10 }} label="Sticker Set Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
-      </mui.DialogContent>
-      <mui.DialogActions>
-        <mui.Button onClick={onClose}>Cancel</mui.Button>
-        <mui.Button onClick={() => {
+        </Mui.DialogContentText>
+        <Mui.TextField style={{ marginTop: 10 }} label="Sticker Set Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+      </Mui.DialogContent>
+      <Mui.DialogActions>
+        <Mui.Button onClick={onClose}>Cancel</Mui.Button>
+        <Mui.Button onClick={() => {
           Remote.createStickerSet(name).then(res => {
             if (res.data.status) {
               setMessageTitle('Success')
@@ -56,9 +57,9 @@ function CreateStickerSetDialog({ state, onOk, onClose }) {
           })
           onOk(name)
           onClose()
-        }}>Create</mui.Button>
-      </mui.DialogActions>
-    </mui.Dialog>)
+        }}>Create</Mui.Button>
+      </Mui.DialogActions>
+    </Mui.Dialog>)
 }
 
 function CreateTTSServiceDialog({ state, onOk, onClose }) {
@@ -74,21 +75,21 @@ function CreateTTSServiceDialog({ state, onOk, onClose }) {
   const [messageOpen, setMessageOpen] = React.useState(false)
 
   return (
-    <mui.Dialog open={state} onClose={onClose}>
+    <Mui.Dialog open={state} onClose={onClose}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
-      <mui.DialogTitle>Create TTS Service</mui.DialogTitle>
-      <mui.DialogContent>
-        <mui.DialogContentText>
+      <Mui.DialogTitle>Create TTS Service</Mui.DialogTitle>
+      <Mui.DialogContent>
+        <Mui.DialogContentText>
           If you are using fast_inference_ branch of GPT-SoVITs, make sure you provide the path to tts_infer.yaml properly.
-        </mui.DialogContentText>
-        <mui.TextField style={{ marginTop: 10 }} label="TTS Service Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
-        <mui.TextField style={{ marginTop: 10 }} label="TTS Service Description" fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />
-        <mui.TextField style={{ marginTop: 10 }} label="TTS Server Endpoint" fullWidth value={url} onChange={(e) => setUrl(e.target.value)} />
-        <mui.TextField style={{ marginTop: 10 }} label="Path to tts_infer.yaml" fullWidth value={ttsInferYamlPath} onChange={(e) => setTTSInferYamlPath(e.target.value)} />
-      </mui.DialogContent>
-      <mui.DialogActions>
-        <mui.Button onClick={onClose}>Cancel</mui.Button>
-        <mui.Button onClick={() => {
+        </Mui.DialogContentText>
+        <Mui.TextField style={{ marginTop: 10 }} label="TTS Service Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+        <Mui.TextField style={{ marginTop: 10 }} label="TTS Service Description" fullWidth value={description} onChange={(e) => setDescription(e.target.value)} />
+        <Mui.TextField style={{ marginTop: 10 }} label="TTS Server Endpoint" fullWidth value={url} onChange={(e) => setUrl(e.target.value)} />
+        <Mui.TextField style={{ marginTop: 10 }} label="Path to tts_infer.yaml" fullWidth value={ttsInferYamlPath} onChange={(e) => setTTSInferYamlPath(e.target.value)} />
+      </Mui.DialogContent>
+      <Mui.DialogActions>
+        <Mui.Button onClick={onClose}>Cancel</Mui.Button>
+        <Mui.Button onClick={() => {
           Remote.createTTSService(name, description, url, ttsInferYamlPath).then(res => {
             if (res.data.status) {
               setMessageTitle('Success')
@@ -106,9 +107,9 @@ function CreateTTSServiceDialog({ state, onOk, onClose }) {
           })
           onOk(name)
           onClose()
-        }}>Create</mui.Button>
-      </mui.DialogActions>
-    </mui.Dialog>)
+        }}>Create</Mui.Button>
+      </Mui.DialogActions>
+    </Mui.Dialog>)
 }
 
 function Home() {
@@ -172,10 +173,10 @@ function Home() {
   }, []);
   React.useLayoutEffect(() => {
     console.log('secondBoxMarginLeft', drawerRef.current?.getBoundingClientRect())
-    setSecondBoxMarginLeft(drawerRef.current?.offsetWidth)
+    setSecondBoxMarginLeft(drawerRef.current?.offsetWidth + 10)
   })
   return (
-    <mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
+    <Mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
       <CreateStickerSetDialog state={createStickerSetDialogState} onOk={(name) => {
         console.log('create sticker set', name)
@@ -194,100 +195,107 @@ function Home() {
         setCreateTTSServiceDialogState(false)
       }} />
 
-      <mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
-        <mui.Toolbar>
-          <mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20 }}>
+      <Mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} class='scroll-container' variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
+        <Mui.Toolbar>
+          <Mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20 }}>
             CyberWaifu-V2
-          </mui.Typography>
-        </mui.Toolbar>
-        <mui.List style={{ padding: 10 }}>
-          <mui.Box>
-            <mui.ListItem sx={{ py: 2, px: 3, padding: 10 }}>
-              <mui.ListItemText sx={{ fontWeight: 'bold' }}>
-                <mui.Typography color="inherit" sx={{ ml: 1, fontSize: 15, fontWeight: 500 }} >
+          </Mui.Typography>
+        </Mui.Toolbar>
+        <Mui.List style={{ padding: 10 }} >
+          <Mui.Box>
+            <Mui.ListItem sx={{ py: 2, px: 3, padding: 10 }}>
+              <Mui.ListItemText sx={{ fontWeight: 'bold' }}>
+                <Mui.Typography color="inherit" sx={{ ml: 1, fontSize: 15, fontWeight: 500 }} >
                   Chats
-                </mui.Typography>
-              </mui.ListItemText>
-            </mui.ListItem>
-            {/* <mui.ListItemButton component={mui.Link} to='/' selected={selectedIndex == 'Home'} onClick={() => handleListItemClick('Home')}>
-              <mui.ListItemIcon>
-                {selectedIndex == 'Home' ? <mui.HomeIcon /> : <HomeIconOutlined />}
-              </mui.ListItemIcon>
-              <mui.ListItemText>Home</mui.ListItemText>
-            </mui.ListItemButton> */}
+                </Mui.Typography>
+              </Mui.ListItemText>
+            </Mui.ListItem>
+            {/* <Mui.ListItemButton component={Mui.Link} to='/' selected={selectedIndex == 'Home'} onClick={() => handleListItemClick('Home')}>
+              <Mui.ListItemIcon>
+                {selectedIndex == 'Home' ? <Mui.HomeIcon /> : <HomeIconOutlined />}
+              </Mui.ListItemIcon>
+              <Mui.ListItemText>Home</Mui.ListItemText>
+            </Mui.ListItemButton> */}
             {charList.map((char, index) => (
-              <mui.ListItemButton key={index} selected={selectedIndex.title == char.charName} onClick={() => setSelectedIndex({ type: 'Character', title: char.charName, ...char })}>
-                <mui.ListItemIcon>
-                  <mui.Avatar src={Remote.charAvatar(char.id)} />
-                </mui.ListItemIcon>
-                <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} secondaryTypographyProps={{ style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }} primary={char.charName} secondary={char.latestMsg} />
-              </mui.ListItemButton>
+              <Mui.ListItemButton key={index} selected={selectedIndex.title == char.charName} onClick={() => setSelectedIndex({ type: 'Character', title: char.charName, ...char })}>
+                <Mui.ListItemIcon>
+                  <Mui.Avatar src={Remote.charAvatar(char.id)} />
+                </Mui.ListItemIcon>
+                <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} secondaryTypographyProps={{ style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }} primary={char.charName} secondary={char.latestMsg} />
+              </Mui.ListItemButton>
             ))}
-          </mui.Box>
-          <mui.Box>
-            <mui.ListItem sx={{ py: 2, px: 3, padding: 10 }}>
-              <mui.ListItemText sx={{ fontWeight: 'bold' }}>
-                <mui.Typography color="inherit" sx={{ ml: 1, fontSize: 15, fontWeight: 500 }} >
+          </Mui.Box>
+          <Mui.Box>
+            <Mui.ListItem sx={{ py: 2, px: 3, padding: 10 }}>
+              <Mui.ListItemText sx={{ fontWeight: 'bold' }}>
+                <Mui.Typography color="inherit" sx={{ ml: 1, fontSize: 15, fontWeight: 500 }} >
                   Settings
-                </mui.Typography>
-              </mui.ListItemText>
-            </mui.ListItem>
-            <mui.ListItemButton selected={selectedIndex.type == 'Stickers'} onClick={() => handleListItemClick('Stickers', 'Stickers')}>
-              <mui.ListItemIcon>
+                </Mui.Typography>
+              </Mui.ListItemText>
+            </Mui.ListItem>
+            <Mui.ListItemButton selected={selectedIndex.type === 'Stickers'} onClick={() => handleListItemClick('Stickers', 'Stickers')}>
+              <Mui.ListItemIcon>
                 <icons.EmojiEmotions />
-              </mui.ListItemIcon>
-              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Stickers"></mui.ListItemText>
-            </mui.ListItemButton>
-            <mui.ListItemButton selected={selectedIndex.type == 'GPTSoViTsMiddleware'} onClick={() => handleListItemClick('GPTSoViTsMiddleware', 'GPT-SoVITs Middleware')}>
-              <mui.ListItemIcon>
+              </Mui.ListItemIcon>
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Stickers"></Mui.ListItemText>
+            </Mui.ListItemButton>
+            <Mui.ListItemButton selected={selectedIndex.type === 'GPTSoViTsMiddleware'} onClick={() => handleListItemClick('GPTSoViTsMiddleware', 'GPT-SoVITs Middleware')}>
+              <Mui.ListItemIcon>
                 <icons.Mic />
-              </mui.ListItemIcon>
-              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="GPT-SoVITs Middleware"></mui.ListItemText>
-            </mui.ListItemButton>
-            <mui.ListItemButton selected={selectedIndex.type == 'More'} onClick={() => handleListItemClick('More', 'More')}>
-              <mui.ListItemIcon>
+              </Mui.ListItemIcon>
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="GPT-SoVITs Middleware"></Mui.ListItemText>
+            </Mui.ListItemButton>
+            <Mui.ListItemButton selected={selectedIndex.type === 'Extensions'} onClick={() => handleListItemClick('Extensions', 'Extensions')}>
+              <Mui.ListItemIcon>
+                <icons.Extension />
+              </Mui.ListItemIcon>
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Extensions"></Mui.ListItemText>
+            </Mui.ListItemButton>
+            <Mui.ListItemButton selected={selectedIndex.type === 'More'} onClick={() => handleListItemClick('More', 'More')}>
+              <Mui.ListItemIcon>
                 <icons.Apps />
-              </mui.ListItemIcon>
-              <mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="More"></mui.ListItemText>
-            </mui.ListItemButton>
-          </mui.Box>
-        </mui.List>
-      </mui.Drawer>
-      <mui.Box style={{ display: 'block', marginLeft: secondBoxMarginLeft }}>
-        <mui.AppBar style={{ paddingLeft: secondBoxMarginLeft }}>
-          <mui.Toolbar>
-            {selectedIndex.type == 'CharacterEdit' && <mui.IconButton color="inherit" onClick={() => {
+              </Mui.ListItemIcon>
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="More"></Mui.ListItemText>
+            </Mui.ListItemButton>
+          </Mui.Box>
+        </Mui.List>
+      </Mui.Drawer>
+      <Mui.Box style={{ display: 'block', marginLeft: secondBoxMarginLeft }}>
+        <Mui.AppBar style={{ paddingLeft: secondBoxMarginLeft }}>
+          <Mui.Toolbar>
+            {selectedIndex.type === 'CharacterEdit' && <Mui.IconButton color="inherit" onClick={() => {
               setSelectedIndex({ ...selectedIndex, type: 'Character' })
             }}>
               <icons.ArrowBack />
-            </mui.IconButton>}
-            <mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20, flexGrow: 1 }}>
+            </Mui.IconButton>}
+            <Mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20, flexGrow: 1 }}>
               {selectedIndex.title}
-            </mui.Typography>
-            {selectedIndex.type == 'Character' && <mui.IconButton color="inherit" onClick={() => {
+            </Mui.Typography>
+            {selectedIndex.type === 'Character' && <Mui.IconButton color="inherit" onClick={() => {
               setSelectedIndex({ ...selectedIndex, type: 'CharacterEdit' })
             }}>
               <icons.MoreVert />
-            </mui.IconButton>}
-            {selectedIndex.type == 'Stickers' && <mui.IconButton color="inherit" onClick={() => {
+            </Mui.IconButton>}
+            {selectedIndex.type === 'Stickers' && <Mui.IconButton color="inherit" onClick={() => {
               setCreateStickerSetDialogState(true)
             }}>
               <icons.Add />
-            </mui.IconButton>}
-          </mui.Toolbar>
-        </mui.AppBar>
-        <mui.Toolbar />
-        <mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
-          {selectedIndex.type == 'Home' && <EmptyChatView />}
-          {selectedIndex.type == 'More' && <More />}
-          {selectedIndex.type == 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
-          {selectedIndex.type == 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
-          {selectedIndex.type == 'TTS Services' && <TTSServicesView></TTSServicesView>}
-          {selectedIndex.type == 'Stickers' && <StickersView></StickersView>}
-          {selectedIndex.type == 'GPTSoViTsMiddleware' && <GPTSoViTsMiddleware></GPTSoViTsMiddleware>}
-        </mui.Paper>
-      </mui.Box>
-    </mui.Box>
+            </Mui.IconButton>}
+          </Mui.Toolbar>
+        </Mui.AppBar>
+        <Mui.Toolbar />
+        <Mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
+          {selectedIndex.type === 'Home' && <EmptyChatView />}
+          {selectedIndex.type === 'More' && <More />}
+          {selectedIndex.type === 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
+          {selectedIndex.type === 'CharacterEdit' && <CharacterEdit key={`edit-${selectedIndex.title}`} {...selectedIndex} />}
+          {selectedIndex.type === 'TTS Services' && <TTSServicesView></TTSServicesView>}
+          {selectedIndex.type === 'Stickers' && <StickersView></StickersView>}
+          {selectedIndex.type === 'GPTSoViTsMiddleware' && <GPTSoViTsMiddleware></GPTSoViTsMiddleware>}
+          {selectedIndex.type === 'Extensions' && <Extensions></Extensions>}
+        </Mui.Paper>
+      </Mui.Box>
+    </Mui.Box>
   )
 }
 

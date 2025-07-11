@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 
 function TTSServiceSelector({ defaultValue, onChange, onErr, style }) {
@@ -41,21 +41,21 @@ function TTSServiceSelector({ defaultValue, onChange, onErr, style }) {
 
   return (
     <>
-      <mui.ListItemButton style={style} onClick={() => setOpen(true)}>
-        <mui.ListItemIcon>
+      <Mui.ListItemButton style={style} onClick={() => setOpen(true)}>
+        <Mui.ListItemIcon>
           <icons.Storage />
-        </mui.ListItemIcon>
-        <mui.ListItemText primary="TTS Service" secondary={value} />
-      </mui.ListItemButton>
-      <mui.Dialog open={open} onClose={() => setOpen(false)}>
-        <mui.DialogTitle>Select TTS Service</mui.DialogTitle>
-        <mui.DialogContent>
-          <mui.DialogContentText>
+        </Mui.ListItemIcon>
+        <Mui.ListItemText primary="TTS Service" secondary={value} />
+      </Mui.ListItemButton>
+      <Mui.Dialog open={open} onClose={() => setOpen(false)}>
+        <Mui.DialogTitle>Select TTS Service</Mui.DialogTitle>
+        <Mui.DialogContent>
+          <Mui.DialogContentText>
             Choose a TTS service for character to use during conversation
-          </mui.DialogContentText>
-          <mui.List>
+          </Mui.DialogContentText>
+          <Mui.List>
             {ttsServiceList.map(r => (
-              <mui.ListItemButton
+              <Mui.ListItemButton
                 key={r.id}
 
                 onClick={() => {
@@ -64,21 +64,21 @@ function TTSServiceSelector({ defaultValue, onChange, onErr, style }) {
                   setOpen(false);
                 }}
               >
-                <mui.ListItemIcon>
+                <Mui.ListItemIcon>
                   <icons.Storage />
-                </mui.ListItemIcon>
-                <mui.ListItemText
+                </Mui.ListItemIcon>
+                <Mui.ListItemText
                   primary={r.name}
                   secondary={r.description}
                 />
-              </mui.ListItemButton>
+              </Mui.ListItemButton>
             ))}
-          </mui.List>
-        </mui.DialogContent>
-        <mui.DialogActions>
-          <mui.Button onClick={() => setOpen(false)}>Close</mui.Button>
-        </mui.DialogActions>
-      </mui.Dialog>
+          </Mui.List>
+        </Mui.DialogContent>
+        <Mui.DialogActions>
+          <Mui.Button onClick={() => setOpen(false)}>Close</Mui.Button>
+        </Mui.DialogActions>
+      </Mui.Dialog>
     </>
   );
 }

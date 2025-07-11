@@ -11,3 +11,69 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ScrollableContainer.css */
+
+.scroll-container {
+    /* height: 200px; Or any desired fixed height */
+    /* width: 300px;  Or any desired fixed width */
+    /* border: 1px solid #ccc; */
+    /* padding: 10px; */
+    /* overflow-y: auto; Scrollbar appears only when content overflows */
+
+    /* For smooth transition of the scrollbar itself (Webkit) */
+    transition: all 0.3s ease;
+}
+
+/* --- Webkit Browsers (Chrome, Safari, Edge) --- */
+
+/* Hide scrollbar by default */
+.scroll-container::-webkit-scrollbar {
+    width: 0px; /* No width by default */
+    background: transparent; /* Make background transparent */
+}
+
+/* Hide scrollbar thumb by default */
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Make thumb transparent */
+    /* border-radius: 6px; */
+}
+
+/* Show scrollbar on hover */
+.scroll-container:hover::-webkit-scrollbar {
+    /* width: 8px; Set desired scrollbar width on hover */
+}
+
+.scroll-container:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3); /* Show semi-transparent thumb on hover */
+}
+
+/* Show scrollbar on focus-within (when the container itself or any child inside it has focus) */
+.scroll-container:focus-within::-webkit-scrollbar {
+    /* width: 8px; Set desired scrollbar width on focus */
+}
+
+.scroll-container:focus-within::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5); /* Show more opaque thumb on focus */
+}
+
+/* --- Firefox --- */
+/* Firefox uses different properties: scrollbar-width and scrollbar-color */
+
+.scroll-container {
+    scrollbar-width: none; /* Hide scrollbar by default (non-standard but supported) */
+    scrollbar-color: transparent transparent; /* Thumb Track */
+}
+
+.scroll-container:hover {
+    scrollbar-width: thin; /* Show thin scrollbar on hover */
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.scroll-container:focus-within {
+    scrollbar-width: thin; /* Show thin scrollbar on focus */
+    scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+}
+
+/* Fallback for other browsers or older versions */
+/* You might want to use a polyfill or accept that it might not hide everywhere */

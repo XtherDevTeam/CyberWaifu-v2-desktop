@@ -2,7 +2,7 @@ import React from 'react';
 
 import Message from '../components/Message';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Remote from '../shared/remote';
 import ContentEditDialog from './ContentEditDialog';
 import StickerSetSelector from './StickerSetSelector';
@@ -88,15 +88,15 @@ function CharacterEdit({ id, charNameInit }) {
     })
   }
 
-  return <mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
-    <mui.Box data-overlayscrollbars-initialize sx={{ overflow: 'scroll', height: '100%' }}>
+  return <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+    <Mui.Box data-overlayscrollbars-initialize sx={{ overflow: 'scroll', height: '100%' }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       {/* align avatar to center */}
 
-      <mui.Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'calc(100% - 30px)', padding: 20 }}>
-        <mui.Avatar src={Remote.charAvatar(id)} sx={{ height: 64, width: 64 }}></mui.Avatar>
-      </mui.Box>
-      <mui.List>
+      <Mui.Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'calc(100% - 30px)', padding: 20 }}>
+        <Mui.Avatar src={Remote.charAvatar(id)} sx={{ height: 64, width: 64 }}></Mui.Avatar>
+      </Mui.Box>
+      <Mui.List>
         <ContentEditDialog
           title="Character Name"
           description={`Enter new name for ${charName}`}
@@ -158,9 +158,9 @@ function CharacterEdit({ id, charNameInit }) {
           }}
         />
 
-      </mui.List>
-    </mui.Box>
-  </mui.Box>
+      </Mui.List>
+    </Mui.Box>
+  </Mui.Box>
 }
 
 export default CharacterEdit

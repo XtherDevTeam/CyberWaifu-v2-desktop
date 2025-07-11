@@ -1,22 +1,22 @@
 import React from 'react';
 import icons from '../shared/icons';
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 import * as Api from '../shared/remote';
 import Message from '../components/Message';
 
 function NotConfigured() {
-  return <mui.Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', flexDirection: 'column' }}>
-    <mui.Typography variant="h5" style={{ marginTop: 20 }}>
+  return <Mui.Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', flexDirection: 'column' }}>
+    <Mui.Typography variant="h5" style={{ marginTop: 20 }}>
       GPT-SoViTs Middleware Not Configured
-    </mui.Typography>
-    <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+    </Mui.Typography>
+    <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
       {"You may go to More -> Settings -> GPT-SoViTs Middleware API URL to add a GPT-SoViTs middleware API URL."}
-    </mui.Typography>
-    <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+    </Mui.Typography>
+    <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
       A GPT-SoViTs middleware is the web interface of AIDub that integrated one-key voice dataset preprocessing and voice model training,
       which can significantly reduce the workload of data preparation and model training for users.
-    </mui.Typography>
-  </mui.Box>
+    </Mui.Typography>
+  </Mui.Box>
 }
 
 
@@ -26,12 +26,12 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
   const [sourcesToFetch, setSourcesToFetch] = React.useState([]);
   const [editingSource, setEditingSource] = React.useState(null);
 
-  return <mui.Dialog open={open} onClose={onClose}>
-    <mui.DialogTitle>Add New Character</mui.DialogTitle>
-    <mui.DialogContent sx={{ minWidth: '40vw' }}>
+  return <Mui.Dialog open={open} onClose={onClose}>
+    <Mui.DialogTitle>Add New Character</Mui.DialogTitle>
+    <Mui.DialogContent sx={{ minWidth: '40vw' }}>
       <div style={{ marginTop: 10 }}></div>
-      <mui.TextField fullWidth label="Character Name" value={editingName} onChange={(e) => setEditingName(e.target.value)}></mui.TextField>
-      <mui.Button
+      <Mui.TextField fullWidth label="Character Name" value={editingName} onChange={(e) => setEditingName(e.target.value)}></Mui.TextField>
+      <Mui.Button
         onClick={() => {
           if (editingName) {
             setNames([...names, editingName])
@@ -47,26 +47,26 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
         style={{ marginTop: 5 }}
       >
         Add Character
-      </mui.Button>
-      <mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }}>
-        {names.map((name, index) => <mui.ListItem key={index}>
-          <mui.ListItemText primary={name} />
-          <mui.IconButton onClick={() => {
+      </Mui.Button>
+      <Mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }} class='scroll-container'>
+        {names.map((name, index) => <Mui.ListItem key={index}>
+          <Mui.ListItemText primary={name} />
+          <Mui.IconButton onClick={() => {
             setNames(names.filter((_, i) => i !== index))
             setEditingName(null)
-          }}><icons.Delete /></mui.IconButton>
-        </mui.ListItem>)}
-      </mui.List>
-      <mui.Box style={{ marginTop: 10 }}>
-        <mui.TextField
+          }}><icons.Delete /></Mui.IconButton>
+        </Mui.ListItem>)}
+      </Mui.List>
+      <Mui.Box style={{ marginTop: 10 }}>
+        <Mui.TextField
           fullWidth
           value={editingSource}
           onChange={(e) => setEditingSource(e.target.value)}
           label="Sources to Fetch"
           placeholder="Enter source URL"
           style={{ marginTop: 5 }}
-        ></mui.TextField>
-        <mui.Button
+        ></Mui.TextField>
+        <Mui.Button
           onClick={() => {
             if (editingSource) {
               setSourcesToFetch([...sourcesToFetch, editingSource])
@@ -82,28 +82,28 @@ function AddNewCharacterDialog({ open, onOk, onErr, onClose }) {
           style={{ marginTop: 5 }}
         >
           Add Source
-        </mui.Button>
-        <mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }}>
-          {sourcesToFetch.map((source, index) => <mui.ListItem key={index}>
-            <mui.ListItemText primary={source} />
-            <mui.IconButton onClick={() => {
+        </Mui.Button>
+        <Mui.List sx={{ maxHeight: 100, overflowY: 'scroll' }} class='scroll-container'>
+          {sourcesToFetch.map((source, index) => <Mui.ListItem key={index}>
+            <Mui.ListItemText primary={source} />
+            <Mui.IconButton onClick={() => {
               setSourcesToFetch(sourcesToFetch.filter((_, i) => i !== index))
               setEditingSource(null)
-            }}><icons.Delete /></mui.IconButton>
-          </mui.ListItem>)}
-        </mui.List>
-      </mui.Box>
-    </mui.DialogContent>
-    <mui.DialogActions>
-      <mui.Button onClick={() => {
+            }}><icons.Delete /></Mui.IconButton>
+          </Mui.ListItem>)}
+        </Mui.List>
+      </Mui.Box>
+    </Mui.DialogContent>
+    <Mui.DialogActions>
+      <Mui.Button onClick={() => {
         onClose()
-      }}>Cancel</mui.Button>
-      <mui.Button onClick={() => {
+      }}>Cancel</Mui.Button>
+      <Mui.Button onClick={() => {
         onOk({ names, sourcesToFetch })
         onClose()
-      }} disabled={names.length === 0 || sourcesToFetch.length === 0}>Add</mui.Button>
-    </mui.DialogActions>
-  </mui.Dialog>
+      }} disabled={names.length === 0 || sourcesToFetch.length === 0}>Add</Mui.Button>
+    </Mui.DialogActions>
+  </Mui.Dialog>
 }
 
 
@@ -149,56 +149,56 @@ function TaskViewDialog({ taskId, raiseMessage, open, onClose }) {
     }
   }, [task])
 
-  return <>{taskId && <mui.Dialog open={open} onClose={() => {
+  return <>{taskId && <Mui.Dialog open={open} onClose={() => {
     if (refresher) {
       clearInterval(refresher)
     }
     onClose()
   }}>
-    <mui.DialogTitle>
+    <Mui.DialogTitle>
       Task #{taskId} details
-    </mui.DialogTitle>
-    <mui.DialogContent>
-      <mui.Grid container spacing={1} alignItems={'center'} justifyContent={'center'}>
-        <mui.Grid item xs={12} sm={12}>
-          <mui.LinearProgress variant="determinate" value={(task.stagesDescription.current_stage) / task.stagesDescription.total_stages.length * 100} />
-        </mui.Grid>
-        <mui.Grid item xs={12} sm={6}>
-          <mui.Typography color='text.primary'>Begin Time: </mui.Typography>
-          <mui.Typography color='text.secondary'>{task.creationTime}</mui.Typography>
-        </mui.Grid>
-        <mui.Grid item xs={12} sm={6}>
-          <mui.Typography color='text.primary'>End Time: </mui.Typography>
-          <mui.Typography color='text.secondary'>{task.completionTime}</mui.Typography>
-        </mui.Grid>
-        <mui.Grid item xs={12} sm={6}>
-          <mui.Typography color='text.primary'>Current Stage: </mui.Typography>
-          <mui.Typography color='text.secondary'>{task.stagesDescription.current_stage}: {task.stagesDescription.total_stages[task.stagesDescription.current_stage - 1]}</mui.Typography>
-        </mui.Grid>
-        <mui.Grid item xs={12} sm={6}>
-          <mui.Typography color='text.primary'>Status: </mui.Typography>
-          <mui.Typography color='text.secondary'>{task.status}</mui.Typography>
-        </mui.Grid>
-        <mui.Grid item xs={12}>
-          <mui.TextField
+    </Mui.DialogTitle>
+    <Mui.DialogContent>
+      <Mui.Grid container spacing={1} alignItems={'center'} justifyContent={'center'}>
+        <Mui.Grid item xs={12} sm={12}>
+          <Mui.LinearProgress variant="determinate" value={(task.stagesDescription.current_stage) / task.stagesDescription.total_stages.length * 100} />
+        </Mui.Grid>
+        <Mui.Grid item xs={12} sm={6}>
+          <Mui.Typography color='text.primary'>Begin Time: </Mui.Typography>
+          <Mui.Typography color='text.secondary'>{task.creationTime}</Mui.Typography>
+        </Mui.Grid>
+        <Mui.Grid item xs={12} sm={6}>
+          <Mui.Typography color='text.primary'>End Time: </Mui.Typography>
+          <Mui.Typography color='text.secondary'>{task.completionTime}</Mui.Typography>
+        </Mui.Grid>
+        <Mui.Grid item xs={12} sm={6}>
+          <Mui.Typography color='text.primary'>Current Stage: </Mui.Typography>
+          <Mui.Typography color='text.secondary'>{task.stagesDescription.current_stage}: {task.stagesDescription.total_stages[task.stagesDescription.current_stage - 1]}</Mui.Typography>
+        </Mui.Grid>
+        <Mui.Grid item xs={12} sm={6}>
+          <Mui.Typography color='text.primary'>Status: </Mui.Typography>
+          <Mui.Typography color='text.secondary'>{task.status}</Mui.Typography>
+        </Mui.Grid>
+        <Mui.Grid item xs={12}>
+          <Mui.TextField
             fullWidth
             label="Log text"
             multiline
             rows={8}
             value={task.log}
           />
-        </mui.Grid>
-      </mui.Grid>
-    </mui.DialogContent>
-    <mui.DialogActions>
-      <mui.Button onClick={() => {
+        </Mui.Grid>
+      </Mui.Grid>
+    </Mui.DialogContent>
+    <Mui.DialogActions>
+      <Mui.Button onClick={() => {
         if (refresher) {
           clearInterval(refresher)
         }
         onClose()
-      }}>Close</mui.Button>
-    </mui.DialogActions>
-  </mui.Dialog>}</>
+      }}>Close</Mui.Button>
+    </Mui.DialogActions>
+  </Mui.Dialog>}</>
 }
 
 
@@ -220,36 +220,36 @@ function PanelModels({ middlewareInfo, raiseMessage }) {
       setTableContent(r)
     }
   }, [middlewareInfo])
-  return <mui.Box style={{ height: '100%', overflowY: 'scroll' }}>
-    <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+  return <Mui.Box style={{ height: '100%', overflowY: 'scroll' }} class='scroll-container'>
+    <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
       A GPT-SoViTs middleware is the web interface of AIDub that integrated one-key voice dataset preprocessing and voice model training,
       which can significantly reduce the workload of data preparation and model training for users.
-    </mui.Typography>
+    </Mui.Typography>
     <div style={{ marginTop: 20 }}></div>
-    <mui.Box sx={{ paddingRight: 10 }}>
-      {tableContent.map((item, index) => <mui.Accordion>
-        <mui.AccordionSummary>
-          <mui.Typography sx={{ width: '33%', flexShrink: 0 }}>{item.name}</mui.Typography>
-          <mui.Typography sx={{ color: 'text.secondary' }}>
+    <Mui.Box sx={{ paddingRight: 10 }}>
+      {tableContent.map((item, index) => <Mui.Accordion>
+        <Mui.AccordionSummary>
+          <Mui.Typography sx={{ width: '33%', flexShrink: 0 }}>{item.name}</Mui.Typography>
+          <Mui.Typography sx={{ color: 'text.secondary' }}>
             #{index + 1}
-          </mui.Typography>
-        </mui.AccordionSummary>
-        <mui.AccordionDetails>
-          <mui.Box>
-            <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+          </Mui.Typography>
+        </Mui.AccordionSummary>
+        <Mui.AccordionDetails>
+          <Mui.Box>
+            <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
               GPT model path: {item.paths[0]}
-            </mui.Typography>
-          </mui.Box>
-          <mui.Box>
-            <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+            </Mui.Typography>
+          </Mui.Box>
+          <Mui.Box>
+            <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
               SoVITs model path: {item.paths[1]}
-            </mui.Typography>
-          </mui.Box>
-        </mui.AccordionDetails>
-      </mui.Accordion>)}
+            </Mui.Typography>
+          </Mui.Box>
+        </Mui.AccordionDetails>
+      </Mui.Accordion>)}
       <div style={{ marginTop: 20 }}></div>
-    </mui.Box>
-    <mui.Fab sx={{
+    </Mui.Box>
+    <Mui.Fab sx={{
       position: 'fixed',
       bottom: 16,
       right: 16,
@@ -257,7 +257,7 @@ function PanelModels({ middlewareInfo, raiseMessage }) {
       setAddNewCharacterOpen(true)
     }}>
       <icons.MoreVert />
-    </mui.Fab>
+    </Mui.Fab>
     <AddNewCharacterDialog
       open={addNewCharacterOpen}
       onOk={(data) => {
@@ -278,7 +278,7 @@ function PanelModels({ middlewareInfo, raiseMessage }) {
         setAddNewCharacterOpen(false)
       }}
     ></AddNewCharacterDialog>
-  </mui.Box>
+  </Mui.Box>
 }
 
 
@@ -302,34 +302,34 @@ function PanelTasks({ middlewareInfo, raiseMessage }) {
     });
   }, [])
 
-  return <mui.Box style={{ height: '100%', overflowY: 'scroll' }}>
-    <mui.Typography variant="body1" style={{ marginTop: 10 }}>
+  return <Mui.Box style={{ height: '100%', overflowY: 'scroll' }} class='scroll-container'>
+    <Mui.Typography variant="body1" style={{ marginTop: 10 }}>
       Check all training tasks on GPT-SoViTs middleware.
-    </mui.Typography>
+    </Mui.Typography>
     <div style={{ marginTop: 20 }}></div>
-    <mui.TableContainer>
-      <mui.Table>
-        <mui.TableHead>
-          <mui.TableRow>
-            <mui.TableCell>Task ID</mui.TableCell>
-            <mui.TableCell>Status</mui.TableCell>
-            <mui.TableCell>Progress</mui.TableCell>
-            <mui.TableCell>Begin Time</mui.TableCell>
-            <mui.TableCell>Actions</mui.TableCell>
-          </mui.TableRow>
-        </mui.TableHead>
-        <mui.TableBody>
-          {tasks.map((task, index) => <mui.TableRow key={index}>
-            <mui.TableCell>{task.id}</mui.TableCell>
-            <mui.TableCell>{task.status}</mui.TableCell>
-            <mui.TableCell>{task.stagesDescription.current_stage} / {task.stagesDescription.total_stages.length}</mui.TableCell>
-            <mui.TableCell>{task.creationTime}</mui.TableCell>
-            <mui.TableCell>
-              <mui.IconButton onClick={() => {
+    <Mui.TableContainer>
+      <Mui.Table>
+        <Mui.TableHead>
+          <Mui.TableRow>
+            <Mui.TableCell>Task ID</Mui.TableCell>
+            <Mui.TableCell>Status</Mui.TableCell>
+            <Mui.TableCell>Progress</Mui.TableCell>
+            <Mui.TableCell>Begin Time</Mui.TableCell>
+            <Mui.TableCell>Actions</Mui.TableCell>
+          </Mui.TableRow>
+        </Mui.TableHead>
+        <Mui.TableBody>
+          {tasks.map((task, index) => <Mui.TableRow key={index}>
+            <Mui.TableCell>{task.id}</Mui.TableCell>
+            <Mui.TableCell>{task.status}</Mui.TableCell>
+            <Mui.TableCell>{task.stagesDescription.current_stage} / {task.stagesDescription.total_stages.length}</Mui.TableCell>
+            <Mui.TableCell>{task.creationTime}</Mui.TableCell>
+            <Mui.TableCell>
+              <Mui.IconButton onClick={() => {
                 setTaskViewId(task.id)
                 setTaskViewOpen(true)
-              }}><icons.Info color="primary" /></mui.IconButton>
-              <mui.IconButton onClick={() => {
+              }}><icons.Info color="primary" /></Mui.IconButton>
+              <Mui.IconButton onClick={() => {
                 Api.deleteMiddlewareTask(task.id).then(r => {
                   if (r.data.status) {
                     setTasks(tasks.filter(e => e.id !== task.id))
@@ -340,16 +340,16 @@ function PanelTasks({ middlewareInfo, raiseMessage }) {
                 }).catch(e => {
                   raiseMessage('Error', `Failed to delete task ${task.id}: ${e}`, 'error')
                 })
-              }}><icons.Delete color="primary" /></mui.IconButton>
-            </mui.TableCell>
-          </mui.TableRow>)}
-        </mui.TableBody>
-      </mui.Table>
-    </mui.TableContainer>
+              }}><icons.Delete color="primary" /></Mui.IconButton>
+            </Mui.TableCell>
+          </Mui.TableRow>)}
+        </Mui.TableBody>
+      </Mui.Table>
+    </Mui.TableContainer>
     <TaskViewDialog taskId={taskViewId} open={taskViewOpen} onClose={() => {
       setTaskViewOpen(false)
     }} raiseMessage={raiseMessage}></TaskViewDialog>
-  </mui.Box>
+  </Mui.Box>
 }
 
 
@@ -385,17 +385,17 @@ function GPTSoViTsMiddleware({ }) {
       setMessageOpen(true)
     });
   }, [])
-  return <mui.Box sx={{ height: 'calc(100% - 48px)', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+  return <Mui.Box sx={{ height: 'calc(100% - 48px)', width: 'calc(100% - 30px)', marginLeft: 30 }}>
     <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
     {middlewareInfo === {} && <NotConfigured></NotConfigured>}
-    {middlewareInfo !== {} && <mui.Tabs value={currentPanel} onChange={setCurrentPanel} aria-label="basic tabs example">
-      <mui.Tab label="Models" value="models" onClick={() => {
+    {middlewareInfo !== {} && <Mui.Tabs value={currentPanel} onChange={setCurrentPanel} aria-label="basic tabs example">
+      <Mui.Tab label="Models" value="models" onClick={() => {
         setCurrentPanel('models')
-      }}></mui.Tab>
-      <mui.Tab label="Tasks" value="tasks" onClick={() => {
+      }}></Mui.Tab>
+      <Mui.Tab label="Tasks" value="tasks" onClick={() => {
         setCurrentPanel('tasks')
-      }}></mui.Tab>
-    </mui.Tabs>}
+      }}></Mui.Tab>
+    </Mui.Tabs>}
     {currentPanel === 'models' && <PanelModels middlewareInfo={middlewareInfo} raiseMessage={(title, content, type) => {
       setMessageTitle(title)
       setMessageContent(content)
@@ -408,7 +408,7 @@ function GPTSoViTsMiddleware({ }) {
       setMessageType(type)
       setMessageOpen(true)
     }}></PanelTasks>}
-  </mui.Box>
+  </Mui.Box>
 }
 
 export default GPTSoViTsMiddleware;

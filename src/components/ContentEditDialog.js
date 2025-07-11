@@ -1,6 +1,6 @@
 import React from 'react';
 
-import mui from '../shared/mui';
+import Mui from '../shared/mui';
 
 function ContentEditDialog({ defaultValue, onOk, title, description, icon }) {
   const [value, setValue] = React.useState(defaultValue)
@@ -11,32 +11,32 @@ function ContentEditDialog({ defaultValue, onOk, title, description, icon }) {
   }, [defaultValue])
 
   return <>
-    <mui.Dialog open={state} onClose={() => setState(false)}>
-      <mui.DialogTitle>Edit</mui.DialogTitle>
-      <mui.DialogContent sx={{minWidth: '50vw', maxWidth: '80vw'}}>
-        <mui.Typography variant='body1'>
+    <Mui.Dialog open={state} onClose={() => setState(false)}>
+      <Mui.DialogTitle>Edit</Mui.DialogTitle>
+      <Mui.DialogContent sx={{minWidth: '50vw', maxWidth: '80vw'}}>
+        <Mui.Typography variant='body1'>
           {description}
-        </mui.Typography>
-        <mui.TextField sx={{marginTop: '1em'}} label={title} value={value} multiline maxRows={6} onChange={(e) => setValue(e.target.value)} variant='outlined' fullWidth></mui.TextField>
-      </mui.DialogContent>
-      <mui.DialogActions>
-        <mui.Button variant='text' onClick={() => setState(false)}>
+        </Mui.Typography>
+        <Mui.TextField sx={{marginTop: '1em'}} label={title} value={value} multiline maxRows={6} onChange={(e) => setValue(e.target.value)} variant='outlined' fullWidth></Mui.TextField>
+      </Mui.DialogContent>
+      <Mui.DialogActions>
+        <Mui.Button variant='text' onClick={() => setState(false)}>
           Cancel
-        </mui.Button>
-        <mui.Button variant='text' onClick={() => {
+        </Mui.Button>
+        <Mui.Button variant='text' onClick={() => {
           onOk(value)
           setState(false)
         }}>
           Save
-        </mui.Button>
-      </mui.DialogActions>
-    </mui.Dialog>
-    <mui.ListItemButton onClick={() => setState(true)}>
-      <mui.ListItemIcon>
+        </Mui.Button>
+      </Mui.DialogActions>
+    </Mui.Dialog>
+    <Mui.ListItemButton onClick={() => setState(true)}>
+      <Mui.ListItemIcon>
         {icon}
-      </mui.ListItemIcon>
-      <mui.ListItemText primary={title} secondary={defaultValue} secondaryTypographyProps={{textOverflow: 'ellipsis', overflow: 'hidden', width: '100%', maxHeight: '3em'}} />
-    </mui.ListItemButton></>
+      </Mui.ListItemIcon>
+      <Mui.ListItemText primary={title} secondary={defaultValue} secondaryTypographyProps={{textOverflow: 'ellipsis', overflow: 'hidden', width: '100%', maxHeight: '3em'}} />
+    </Mui.ListItemButton></>
 }
 
 export default ContentEditDialog

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import * as mui from '@mui/material';
+import Mui from '../shared/mui';
 
 import icons from '../shared/icons';
 import * as Remote from '../shared/remote';
@@ -35,27 +35,27 @@ function StickerSetSelector({ defaultValue, onChange, onErr, style }) {
 
   return (
     <>
-      <mui.ListItemButton
+      <Mui.ListItemButton
         style={style}
         primaryText="Sticker set"
         secondaryText={value}
         onClick={() => setStatus(true)}
       >
-        <mui.ListItemIcon>
+        <Mui.ListItemIcon>
           <icons.EmojiEmotions />
-        </mui.ListItemIcon>
-        <mui.ListItemText primary="Sticker set" secondary={value} />
-      </mui.ListItemButton>
-      <mui.Portal>
-        <mui.Dialog open={status} onClose={() => setStatus(false)}>
-          <mui.DialogTitle>Select sticker set</mui.DialogTitle>
-          <mui.DialogContent data-overlayscrollbars-initialize>
-            <mui.Typography variant="body2">
+        </Mui.ListItemIcon>
+        <Mui.ListItemText primary="Sticker set" secondary={value} />
+      </Mui.ListItemButton>
+      <Mui.Portal>
+        <Mui.Dialog open={status} onClose={() => setStatus(false)}>
+          <Mui.DialogTitle>Select sticker set</Mui.DialogTitle>
+          <Mui.DialogContent data-overlayscrollbars-initialize>
+            <Mui.Typography variant="body2">
               Choose a sticker set for character to use during conversation
-            </mui.Typography>
-            <mui.List sx={{ maxHeight: '40vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
+            </Mui.Typography>
+            <Mui.List sx={{ maxHeight: '40vh', overflow: 'scroll' }} data-overlayscrollbars-initialize>
               {stickerList.map((r) => (
-                <mui.ListItemButton
+                <Mui.ListItemButton
                   key={r.id}
                   primaryText={r.setName}
                   onClick={() => {
@@ -64,19 +64,19 @@ function StickerSetSelector({ defaultValue, onChange, onErr, style }) {
                     setStatus(false);
                   }}
                 >
-                  <mui.ListItemIcon sx={{ padding: 5 }}>
-                    <mui.Avatar sizes='48px' src={Remote.stickerGet(r.id, r.previewSticker)} />
-                  </mui.ListItemIcon>
-                  <mui.ListItemText primary={r.setName} />
-                </mui.ListItemButton>
+                  <Mui.ListItemIcon sx={{ padding: 5 }}>
+                    <Mui.Avatar sizes='48px' src={Remote.stickerGet(r.id, r.previewSticker)} />
+                  </Mui.ListItemIcon>
+                  <Mui.ListItemText primary={r.setName} />
+                </Mui.ListItemButton>
               ))}
-            </mui.List>
-          </mui.DialogContent>
-          <mui.DialogActions>
-            <mui.Button onClick={() => setStatus(false)}>Close</mui.Button>
-          </mui.DialogActions>
-        </mui.Dialog>
-      </mui.Portal>
+            </Mui.List>
+          </Mui.DialogContent>
+          <Mui.DialogActions>
+            <Mui.Button onClick={() => setStatus(false)}>Close</Mui.Button>
+          </Mui.DialogActions>
+        </Mui.Dialog>
+      </Mui.Portal>
     </>
   );
 }

@@ -340,6 +340,66 @@ function deleteMiddlewareTask(id) {
   })
 }
 
+function getExtraInfoList(prompt) {
+  return axios.post(`${serverUrl}/api/v1/extra_info`).then(r => {
+    return r.data
+  })
+}
+
+function createExtraInfo(name, description, author, enabled, content) {
+  return axios.post(`${serverUrl}/api/v1/extra_info/create`, { name, description, author, enabled, content }).then(r => {
+    return r.data
+  })
+}
+
+function getExtraInfo(id) {
+  return axios.post(`${serverUrl}/api/v1/extra_info/get`, { id }).then(r => {
+    return r.data
+  })
+}
+
+function updateExtraInfo(id, name, description, author, enabled, content) {
+  return axios.post(`${serverUrl}/api/v1/extra_info/update`, { id, name, description, author, enabled, content }).then(r => {
+    return r.data
+  })
+}
+
+function deleteExtraInfo(id) {
+  return axios.post(`${serverUrl}/api/v1/extra_info/delete`, { id }).then(r => {
+    return r.data
+  })
+}
+
+function getUserScriptList() {
+  return axios.post(`${serverUrl}/api/v1/user_script`).then(r => {
+    return r.data
+  })
+}
+
+function getUserScript(id) {
+  return axios.post(`${serverUrl}/api/v1/user_script/get`, { id }).then(r => {
+    return r.data
+  })
+}
+
+function createUserScript(name, description, author, enabled, content) {
+  return axios.post(`${serverUrl}/api/v1/user_script/create`, { name, description, author, enabled, content }).then(r => {
+    return r.data
+  })
+}
+
+function updateUserScript(id, name, description, author, enabled, content) {
+  return axios.post(`${serverUrl}/api/v1/user_script/update`, { id, name, description, author, enabled, content }).then(r => {
+    return r.data
+  })
+}
+
+function deleteUserScript(id) {
+  return axios.post(`${serverUrl}/api/v1/user_script/delete`, { id }).then(r => {
+    return r.data
+  })
+}
+
 
 export {
   addStickerToSet,
@@ -395,4 +455,14 @@ export {
   getMiddlewareTasks,
   deleteMiddlewareTask,
   setMiddlewareUrl,
+  getExtraInfoList,
+  createExtraInfo,
+  getExtraInfo,
+  updateExtraInfo,
+  deleteExtraInfo,
+  getUserScriptList,
+  getUserScript,
+  createUserScript,
+  updateUserScript,
+  deleteUserScript
 };
