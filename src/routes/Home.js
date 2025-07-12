@@ -17,6 +17,7 @@ import TTSServicesView from '../components/TTSServicesView';
 import More from '../components/More';
 import GPTSoViTsMiddleware from '../components/GPTSoViTsMiddleware';
 import Extensions from '../components/Extensions';
+import CreateCharacter from '../components/CreateCharacter';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -224,6 +225,14 @@ function Home() {
                 <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} secondaryTypographyProps={{ style: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } }} primary={char.charName} secondary={char.latestMsg} />
               </Mui.ListItemButton>
             ))}
+            <Mui.ListItemButton selected={selectedIndex.type === 'CreateCharacter' && selectedIndex.title === 'Create'} onClick={() => {
+              setSelectedIndex({ type: 'CreateCharacter', title: 'Create' })
+            }}>
+              <Mui.ListItemIcon>
+                <icons.Add />
+              </Mui.ListItemIcon>
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Create Character"></Mui.ListItemText>
+            </Mui.ListItemButton>
           </Mui.Box>
           <Mui.Box>
             <Mui.ListItem sx={{ py: 2, px: 3, padding: 10 }}>
@@ -293,6 +302,7 @@ function Home() {
           {selectedIndex.type === 'Stickers' && <StickersView></StickersView>}
           {selectedIndex.type === 'GPTSoViTsMiddleware' && <GPTSoViTsMiddleware></GPTSoViTsMiddleware>}
           {selectedIndex.type === 'Extensions' && <Extensions></Extensions>}
+          {selectedIndex.type === 'CreateCharacter' && <CreateCharacter />}
         </Mui.Paper>
       </Mui.Box>
     </Mui.Box>

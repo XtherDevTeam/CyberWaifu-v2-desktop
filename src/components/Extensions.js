@@ -188,7 +188,7 @@ function PanelUserScripts() {
           <Mui.ListItemText primary={info.name} secondary={info.description} />
           <Mui.ListItemSecondaryAction>
             <Mui.IconButton edge="end" aria-label="delete" onClick={() => {
-              Api.deleteExtraInfo(info.id).then(() => {
+              Api.deleteUserScript(info.id).then(() => {
                 setUserScripts(userScripts.filter(i => i.id !== info.id))
               })
             }}>

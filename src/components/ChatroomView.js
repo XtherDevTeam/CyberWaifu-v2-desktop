@@ -16,6 +16,7 @@ import theme from '../shared/theme';
 import AudioMessagesView from './AudioMessagesView';
 import Message from './Message';
 import StickerPicker from './StickerPicker';
+import RoomObject from './RoomObject';
 
 const getCursorPosition = (ctrl) => {
   let CaretPos = {
@@ -79,6 +80,7 @@ function ChatroomView({ id, charName }) {
   const [isReceivingMessage, setIsReceivingMessage] = React.useState(false)
   const charHistoryOffset = React.useRef(0)
   const chatSession = React.useRef(null)
+  const chatRoomObject = React.useRef(null)
   const [useStickerSet, setUseStickerSet] = React.useState(0)
   const [availableStickers, setAvailableStickers] = React.useState([])
   const [sessionUsername, setSessionUsername] = React.useState('')
@@ -218,9 +220,10 @@ function ChatroomView({ id, charName }) {
         let delay = 0
         if (resp.role === 'model' && resp.type === 0) {
           if (firstFlag) {
-            delay = resp.text.length * 10 // Calculate delay based on text length
-          } else {
             firstFlag = false
+          } else {
+            delay = resp.text.length * 10 // Calculate delay based on text length
+            console.log('first message', delay)
           }
         }
 
@@ -309,36 +312,28 @@ function ChatroomView({ id, charName }) {
   function sendMessageChain(msgChain) {
     if (chatSession.current === null) {
       setIsReceivingMessage(true)
-      Remote.chatEstablish(charName, msgChain).then(r => {
+      Remote.chatEstablish(charName).then(r => {
         if (r.data.status) {
           console.log(r.data)
-          chatSession.current = r.data.session
-          receiveMessage(r.data.response)
+          chatSession.current = r.data.data.session
+          chatRoomObject.current = new RoomObject(chatSession.current, Remote.serverUrl, msgChain)
+          chatRoomObject.current.on('message', (list_of_msg) => {
+            receiveMessage(list_of_msg)
+          })
+          chatRoomObject.current.on('error', (error_msg) => {
+            console.log('error', error_msg)
+            setMessageTitle('Failed to send message')
+            setMessageContent(error_msg)
+            setMessageType('error')
+            setMessageOpen(true)
+          })
+          chatRoomObject.current.connect()
         }
         setPendingMsgChain([])
       })
     } else {
       setIsReceivingMessage(true)
-      Remote.chatMessage(chatSession.current, msgChain).then(r => {
-        if (r.data.status) {
-          receiveMessage(r.data.response)
-        } else {
-          // setMessageText(`Failed to send message: ${r.data.data}`)
-          // setMessageState(true)
-          setMessageTitle('Failed to send message')
-          setMessageContent(r.data.data)
-          setMessageType('error')
-          setMessageOpen(true)
-        }
-        setPendingMsgChain([])
-      }).catch(r => {
-        // setMessageText(`Failed to send message: NetworkError`)
-        // setMessageState(true)
-        setMessageTitle('Failed to send message')
-        setMessageContent('NetworkError')
-        setMessageType('error')
-        setMessageOpen(true)
-      })
+      chatRoomObject.current.sendMessage(msgChain)
     }
   }
 
@@ -469,7 +464,6 @@ function ChatroomView({ id, charName }) {
               }
             }}
             onPaste={(e) => {
-              e.preventDefault()
               let items = (e.clipboardData || e.originalEvent.clipboardData).items;
               for (var index in items) {
                 var item = items[index];

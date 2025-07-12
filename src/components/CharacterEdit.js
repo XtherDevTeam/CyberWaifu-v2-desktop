@@ -8,6 +8,7 @@ import ContentEditDialog from './ContentEditDialog';
 import StickerSetSelector from './StickerSetSelector';
 import TTSServiceSelector from './TTSServiceSelector';
 import TTSModelSelector from './TTSModelSelector';
+import fs from '../shared/fs'
 
 function CharacterEdit({ id, charNameInit }) {
   const [charInfo, setCharInfo] = React.useState({})
@@ -94,7 +95,31 @@ function CharacterEdit({ id, charNameInit }) {
       {/* align avatar to center */}
 
       <Mui.Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: 'calc(100% - 30px)', padding: 20 }}>
-        <Mui.Avatar src={Remote.charAvatar(id)} sx={{ height: 64, width: 64 }}></Mui.Avatar>
+        <Mui.Avatar onClick={() => {
+          console.log("upload avatar")
+          fs.launchImagePickerAsync(false).then(files => {
+            if (files.length > 0) {
+              fs.uploadAsync(Remote.updateCharacterAvatar(id), files[0], {
+                onProgress: (progress) => {
+                  console.log(`uploading ${progress}%`)
+                },
+                onError: (e) => {
+                  setMessageType('error')
+                  setMessageTitle('Error')
+                  setMessageContent(e.message)
+                  setMessageOpen(true)
+                },
+                onSuccess: (r) => {
+                  setCharAvatarUrl(r.data.url)
+                  setMessageTitle('Success')
+                  setMessageContent('Avatar updated successfully')
+                  setMessageType('success')
+                  setMessageOpen(true)
+                }
+              })
+            }
+          })
+        }} src={Remote.charAvatar(id)} sx={{ height: 64, width: 64 }}></Mui.Avatar>
       </Mui.Box>
       <Mui.List>
         <ContentEditDialog

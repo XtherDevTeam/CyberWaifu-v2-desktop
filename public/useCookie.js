@@ -7,7 +7,7 @@ const { app, session } = require('electron');
  */
 function useCookie() {
     app.whenReady().then(() => {
-        const filter = { urls: ['https://*/*'] };
+        const filter = { urls: ['https://*/*', 'http://*/*'] };
         session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
             console.log('received headers', details.url, 'fucking electron')
             details.responseHeaders['Access-Control-Allow-Origin'] = [

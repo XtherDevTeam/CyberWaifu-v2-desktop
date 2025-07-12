@@ -74,10 +74,9 @@ function characterList() {
   return axios.post(`${serverUrl}/api/v1/char_list`)
 }
 
-function chatEstablish(charName, msgChain) {
+function chatEstablish(charName) {
   return axios.post(`${serverUrl}/api/v1/chat/establish`, {
-    charName,
-    msgChain
+    charName
   })
 }
 
@@ -400,6 +399,12 @@ function deleteUserScript(id) {
   })
 }
 
+function characterGenerator(name) {
+  return axios.post(`${serverUrl}/api/v1/tools/character_generator`, { name }).then(r => {
+    return r.data
+  })
+}
+
 
 export {
   addStickerToSet,
@@ -464,5 +469,7 @@ export {
   getUserScript,
   createUserScript,
   updateUserScript,
-  deleteUserScript
+  deleteUserScript,
+  characterGenerator,
+  serverUrl
 };
