@@ -215,7 +215,7 @@ function Extensions() {
   const [messageContent, setMessageContent] = React.useState(null);
   const [messageType, setMessageType] = React.useState(null);
 
-  return <Mui.Box sx={{ height: 'calc(100% - 48px)', width: 'calc(100% - 30px)', marginLeft: 30 }} class='scroll-container'>
+  return <Mui.Box sx={{ height: '100%', width: '100%' }} class='scroll-container'>
     <Message open={messageOpen} title={messageTitle} content={messageContent} type={messageType} dismiss={() => {
       setMessageOpen(false);
     }} />

@@ -26,7 +26,7 @@ function More() {
         setGptSoVitsMiddlewareApiUrl(r.data.data.gpt_sovits_middleware_url)
       } else {
         setMessageTitle('Error')
-        setMessageContent(r.data.message)
+        setMessageContent(r.data.data)
         setMessageType('error')
         setMessageOpen(true)
       }
@@ -39,7 +39,7 @@ function More() {
   }, [])
 
 
-  return <>{!showAboutPage && <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30, paddingRight: 30 }}>
+  return <>{!showAboutPage && <Mui.Box sx={{ height: '100%', width: '100%', marginLeft: 20 }}>
     <Mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}  class='scroll-container'>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       <Mui.List style={{ marginTop: 30 }}>
@@ -54,7 +54,7 @@ function More() {
               setMessageOpen(true)
             } else {
               setMessageTitle('Error')
-              setMessageContent(r.data.message)
+              setMessageContent(r.data.data)
               setMessageType('error')
               setMessageOpen(true)
             }
@@ -70,7 +70,7 @@ function More() {
               setMessageOpen(true)
             } else {
               setMessageTitle('Error')
-              setMessageContent(r.data.message)
+              setMessageContent(r.data.data)
               setMessageType('error')
               setMessageOpen(true)
             }
@@ -88,7 +88,7 @@ function More() {
               setMessageOpen(true)
             } else {
               setMessageTitle('Error')
-              setMessageContent(r.data.message)
+              setMessageContent(r.data.data)
               setMessageType('error')
               setMessageOpen(true)
             }

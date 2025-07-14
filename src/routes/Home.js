@@ -18,6 +18,7 @@ import More from '../components/More';
 import GPTSoViTsMiddleware from '../components/GPTSoViTsMiddleware';
 import Extensions from '../components/Extensions';
 import CreateCharacter from '../components/CreateCharacter';
+import THA4Service from '../components/THA4Services';
 
 function CreateStickerSetDialog({ state, onOk, onClose }) {
   let [name, setName] = React.useState('')
@@ -132,7 +133,7 @@ function Home() {
   const drawerRef = React.useRef(null);
 
   // second box marginLeft
-  const [secondBoxMarginLeft, setSecondBoxMarginLeft] = React.useState(0)
+  const [secondBoxMarginLeft, setSecondBoxMarginLeft] = React.useState('calc(30vw + 2px)')
 
   const handleListItemClick = (type, index) => {
     setSelectedIndex({
@@ -172,10 +173,6 @@ function Home() {
       console.error(e)
     })
   }, []);
-  React.useLayoutEffect(() => {
-    console.log('secondBoxMarginLeft', drawerRef.current?.getBoundingClientRect())
-    setSecondBoxMarginLeft(drawerRef.current?.offsetWidth + 10)
-  })
   return (
     <Mui.Box style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '100vw', backgroundColor: usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)}></Message>
@@ -196,7 +193,7 @@ function Home() {
         setCreateTTSServiceDialogState(false)
       }} />
 
-      <Mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} class='scroll-container' variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh', width: '30vw' }}>
+      <Mui.Drawer ref={drawerRef} open={true} onLoad={() => { console.log(drawerRef) }} class='scroll-container' variant="permanent" style={{ position: 'absolute', top: 0, left: 0, height: '100vh' }} PaperProps={{ sx: { width: '30vw' } }}>
         <Mui.Toolbar>
           <Mui.Typography color="inherit" sx={{ fontWeight: 500, letterSpacing: 0.5, fontSize: 20 }}>
             CyberWaifu-V2
@@ -260,6 +257,12 @@ function Home() {
               </Mui.ListItemIcon>
               <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="Extensions"></Mui.ListItemText>
             </Mui.ListItemButton>
+            <Mui.ListItemButton selected={selectedIndex.type === 'THA4Services'} onClick={() => handleListItemClick('THA4Services', 'THA4 Middleware')}>
+              <Mui.ListItemIcon>
+                <icons.Portrait />
+              </Mui.ListItemIcon> 
+              <Mui.ListItemText style={{ paddingLeft: 10, maxWidth: '20vw' }} primary="THA4 Middleware"></Mui.ListItemText>
+            </Mui.ListItemButton>
             <Mui.ListItemButton selected={selectedIndex.type === 'More'} onClick={() => handleListItemClick('More', 'More')}>
               <Mui.ListItemIcon>
                 <icons.Apps />
@@ -269,8 +272,8 @@ function Home() {
           </Mui.Box>
         </Mui.List>
       </Mui.Drawer>
-      <Mui.Box style={{ display: 'block', marginLeft: secondBoxMarginLeft }}>
-        <Mui.AppBar style={{ paddingLeft: secondBoxMarginLeft }}>
+      <Mui.Box style={{ display: 'block', marginLeft: secondBoxMarginLeft, width: `calc(100vw - ${secondBoxMarginLeft})` }}>
+        <Mui.AppBar style={{ left: secondBoxMarginLeft, width: `calc(100vw - ${secondBoxMarginLeft})`, zIndex: 1200 }}>
           <Mui.Toolbar>
             {selectedIndex.type === 'CharacterEdit' && <Mui.IconButton color="inherit" onClick={() => {
               setSelectedIndex({ ...selectedIndex, type: 'Character' })
@@ -293,7 +296,7 @@ function Home() {
           </Mui.Toolbar>
         </Mui.AppBar>
         <Mui.Toolbar />
-        <Mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)` }}>
+        <Mui.Paper style={{ padding: 0, borderTopLeftRadius: 30, height: `calc(100vh - 64px)`, borderColor : usePrefersColorScheme() == 'light' ? theme.light.palette.surfaceContainer.main : theme.dark.palette.surfaceContainer.main }}>
           {selectedIndex.type === 'Home' && <EmptyChatView />}
           {selectedIndex.type === 'More' && <More />}
           {selectedIndex.type === 'Character' && <ChatroomView key={`room-${selectedIndex.title}`} {...selectedIndex} />}
@@ -303,6 +306,7 @@ function Home() {
           {selectedIndex.type === 'GPTSoViTsMiddleware' && <GPTSoViTsMiddleware></GPTSoViTsMiddleware>}
           {selectedIndex.type === 'Extensions' && <Extensions></Extensions>}
           {selectedIndex.type === 'CreateCharacter' && <CreateCharacter />}
+          {selectedIndex.type === 'THA4Services' && <THA4Service></THA4Service>}
         </Mui.Paper>
       </Mui.Box>
     </Mui.Box>

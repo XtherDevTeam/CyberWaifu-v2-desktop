@@ -206,7 +206,7 @@ function TTSServicesView() {
       console.error(e)
     })
   }, [])
-  return <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+  return <Mui.Box sx={{ height: '100%', width: '100%' }}>
     <Mui.Box data-overlayscrollbars-initialize sx={{ height: '100%', overflowY: 'scroll' }}  class='scroll-container'>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       <EditTTSServiceDialog state={editTTSServiceDialogState} serviceID={editTTSServerDialogServiceID} onOk={(v) => {

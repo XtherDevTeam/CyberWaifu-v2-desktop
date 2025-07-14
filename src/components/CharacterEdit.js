@@ -89,7 +89,7 @@ function CharacterEdit({ id, charNameInit }) {
     })
   }
 
-  return <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+  return <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 20 }}>
     <Mui.Box data-overlayscrollbars-initialize sx={{ overflow: 'scroll', height: '100%' }}>
       <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
       {/* align avatar to center */}

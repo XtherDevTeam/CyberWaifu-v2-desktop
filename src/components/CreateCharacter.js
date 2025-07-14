@@ -102,7 +102,7 @@ function CreateCharacter() {
   };
 
   return (
-    <Mui.Box sx={{ height: '100%', width: 'calc(100% - 30px)', marginLeft: 30 }}>
+    <Mui.Box sx={{ height: '100%', width: '100%', marginLeft: 10 }}>
       <Mui.Box data-overlayscrollbars-initialize sx={{ overflow: 'scroll', height: '100%', paddingRight: '15px' }}>
         <Message title={messageTitle} message={messageContent} type={messageType} open={messageOpen} dismiss={() => setMessageOpen(false)} />
 

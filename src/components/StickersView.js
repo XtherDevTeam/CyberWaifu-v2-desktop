@@ -125,7 +125,7 @@ function StickerSetEdit({ state, setId, onOk, onCancel }) {
               setStickers(stickers.filter(s => s.id !== sticker.id))
             } else {
               setMessageTitle('Error')
-              setMessageContent(r.data.message)
+              setMessageContent(r.data.data)
               setMessageType('error')
               setMessageOpen(true)
             }
@@ -171,7 +171,7 @@ function StickersView() {
         setStickerSets(r.data.data)
       } else {
         setMessageTitle('Error')
-        setMessageContent(r.data.message)
+        setMessageContent(r.data.data)
         setMessageType('error')
         setMessageOpen(true)
       }
@@ -189,7 +189,7 @@ function StickersView() {
             setMessageOpen(true)
           } else {
             setMessageTitle('Error')
-            setMessageContent(r.data.message)
+            setMessageContent(r.data.data)
             setMessageType('error')
             setMessageOpen(true)
           }

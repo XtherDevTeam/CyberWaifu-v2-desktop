@@ -405,6 +405,48 @@ function characterGenerator(name) {
   })
 }
 
+function createTHA4Service(name, description, configuration) {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/create`, { name, description, configuration }).then(r => {
+    return r.data
+  })
+}
+
+function getTHA4ServiceList() {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/list`).then(r => {
+    return r.data
+  })
+}
+
+function getTHA4ServiceInfo(id) {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/get`, { id }).then(r => {
+    return r.data
+  })
+}
+
+function updateTHA4ServiceAvatar(id, avatarFileObject) {
+  let formData = new FormData();
+  formData.append('avatar', avatarFileObject);
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/set_avatar/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(r => {
+    return r.data
+  })
+}
+
+function getTHA4ServiceAvatarUrl(id) {
+  return `${serverUrl}/api/v1/tha4_middleware/service/get_avatar/${id}`
+}
+
+function updateTHA4Service(id, name, description, configuration) {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/update`, { id, name, description, configuration }).then(r => {
+    return r.data
+  })
+}
+
+function deleteTHA4Service(id) {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/service/delete`, { id }).then(r => {
+    return r.data
+  })
+}
+
 
 export {
   addStickerToSet,
@@ -471,5 +513,12 @@ export {
   updateUserScript,
   deleteUserScript,
   characterGenerator,
+  createTHA4Service,
+  getTHA4ServiceList,
+  getTHA4ServiceInfo,
+  updateTHA4Service,
+  deleteTHA4Service,
+  getTHA4ServiceAvatarUrl,
+  updateTHA4ServiceAvatar,
   serverUrl
 };
