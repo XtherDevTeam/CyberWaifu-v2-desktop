@@ -91,10 +91,12 @@ jobs:
 
     - name: npm install
       run: |
+        export NODE_OPTIONS="--max_old_space_size=4096"
         npm install
 
     - name: Build application
       run: |
+        export NODE_OPTIONS="--max_old_space_size=4096"
         CI=false npm run build
     
     - name: Build Electron
