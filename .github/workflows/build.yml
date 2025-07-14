@@ -37,7 +37,7 @@ jobs:
         npm run electron-build
           
     - name: upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-build
         path: dist/*.AppImage
@@ -68,7 +68,7 @@ jobs:
         npx electron-builder
           
     - name: upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: windows-build
         path: dist/*.exe
@@ -102,7 +102,7 @@ jobs:
         CSC_IDENTITY_AUTO_DISCOVERY=false npx electron-builder --universal
           
     - name: upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: macos-build
         path: dist/*.dmg
