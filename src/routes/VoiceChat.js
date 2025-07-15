@@ -104,7 +104,7 @@ function VoiceChat() {
           width: 1280,
           height: 720,
           frameRate: 10,
-        } 
+        },
       }}
     >
       <VideoConference></VideoConference>

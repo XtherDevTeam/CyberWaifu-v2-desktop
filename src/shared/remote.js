@@ -118,14 +118,15 @@ function charHistory(charId, offset = 0) {
   return axios.post(`${serverUrl}/api/v1/char/${charId}/history/${offset}`)
 }
 
-function charNew(charName, useTTSModel, useStickerSet, charPrompt, pastMemories, exampleChats) {
+function charNew(charName, useTTSModel, useStickerSet, charPrompt, pastMemories, exampleChats, tha4Service) {
   return axios.post(`${serverUrl}/api/v1/char/new`, {
     charName,
     useTTSModel,
     useStickerSet,
     charPrompt,
     pastMemories,
-    exampleChats
+    exampleChats,
+    tha4Service
   })
 }
 
@@ -165,14 +166,15 @@ function stickerList(setId) {
   return axios.post(`${serverUrl}/api/v1/sticker/list`, { setId })
 }
 
-function editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel) {
+function editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel, tha4Service) {
   return axios.post(`${serverUrl}/api/v1/char/${id}/edit`, {
     useStickerSet,
     charName,
     charPrompt,
     pastMemories,
     exampleChats,
-    useTTSModel
+    useTTSModel,
+    tha4Service
   })
 }
 
@@ -447,6 +449,12 @@ function deleteTHA4Service(id) {
   })
 }
 
+function updateTHA4MiddlewareUrl(url) {
+  return axios.post(`${serverUrl}/api/v1/tha4_middleware/update_url`, { url }).then(r => {
+    return r.data
+  })
+}
+
 
 export {
   addStickerToSet,
@@ -520,5 +528,6 @@ export {
   deleteTHA4Service,
   getTHA4ServiceAvatarUrl,
   updateTHA4ServiceAvatar,
+  updateTHA4MiddlewareUrl,
   serverUrl
 };

@@ -8,6 +8,7 @@ import * as Remote from '../shared/remote';
 import ContentEditDialog from './ContentEditDialog';
 import StickerSetSelector from './StickerSetSelector';
 import TTSModelSelector from './TTSModelSelector';
+import THA4ServiceSelector from './THA4ServiceSelector';
 
 
 function CreateCharacter() {
@@ -30,6 +31,7 @@ function CreateCharacter() {
   const [exampleChats, setExampleChats] = React.useState("");
   const [useStickerSet, setUseStickerSet] = React.useState(null);
   const [useTTSModel, setUseTTSModel] = React.useState("None");
+  const [tha4Service, setTHA4Service] = React.useState(null);
 
   const handleGenerateProfile = () => {
     if (!charName.trim()) {
@@ -82,7 +84,7 @@ function CreateCharacter() {
     }
 
     setIsSubmitting(true);
-    Remote.charNew(charName, useTTSModel, useStickerSet?.id || null, charPrompt, initialMemories, exampleChats).then(r => {
+    Remote.charNew(charName, useTTSModel, useStickerSet?.id || null, charPrompt, initialMemories, exampleChats, tha4Service).then(r => {
       if (r.data.status) {
         setMessageTitle('Success');
         setMessageContent(`Character "${charName}" created successfully!`);
@@ -163,6 +165,17 @@ function CreateCharacter() {
               setMessageOpen(true);
             }}
             disabled={isGenerating}
+          />
+          <THA4ServiceSelector
+            disabled={isGenerating}
+            onChange={v => setTHA4Service(v)}
+            defaultValue={tha4Service}
+            onErr={(e) => {
+              setMessageType('error');
+              setMessageTitle('Error');
+              setMessageContent(e);
+              setMessageOpen(true);
+            }}
           />
           <StickerSetSelector
             onChange={(v) => setUseStickerSet(v)}

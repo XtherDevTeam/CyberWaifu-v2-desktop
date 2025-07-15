@@ -2,7 +2,7 @@
   "name": "cyberwaifu-v2-desktop",
   "author": "Jerry Chou",
   "description": "A cross-platform desktop client for CyberWaifu-v2",
-  "version": "0.1.0",
+  "version": "1.3.0",
   "private": true,
   "main": "public/electron.js",
   "homepage": ".",

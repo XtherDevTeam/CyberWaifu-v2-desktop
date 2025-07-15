@@ -15,6 +15,7 @@ function More() {
   const [userPersona, setUserPersona] = React.useState('')
   const [userName, setUserName] = React.useState('')
   const [gptSoVitsMiddlewareApiUrl, setGptSoVitsMiddlewareApiUrl] = React.useState('')
+  const [tha4MiddlewareUrl, setTha4MiddlewareUrl] = React.useState('')
   const [showAboutPage, setShowAboutPage] = React.useState(false)
 
   function handleServiceInfoRefresh() {
@@ -24,6 +25,7 @@ function More() {
         setUserPersona(r.data.data.user_persona)
         setUserName(r.data.data.session_username)
         setGptSoVitsMiddlewareApiUrl(r.data.data.gpt_sovits_middleware_url)
+        setTha4MiddlewareUrl(r.data.data.tha4_middleware_url) 
       } else {
         setMessageTitle('Error')
         setMessageContent(r.data.data)
@@ -94,11 +96,28 @@ function More() {
             }
           })
         }} icon={<icons.Cloud />} />
+        <ContentEditDialog title="THA4 Middleware API URL" description={'Set the URL of the THA4 middleware API.'} defaultValue={tha4MiddlewareUrl} onOk={(value) => {
+          setTha4MiddlewareUrl(value)
+          Remote.updateTHA4MiddlewareUrl(value).then(r => {
+            console.log(r)
+            if (r.status) {
+              setMessageTitle('Success')
+              setMessageContent('THA4 middleware API URL updated successfully.')
+              setMessageType('success')
+              setMessageOpen(true)
+            } else {
+              setMessageTitle('Error')
+              setMessageContent(r.data)
+              setMessageType('error')
+              setMessageOpen(true)
+            }
+          })
+        }} icon={<icons.Portrait />} />
         <Mui.ListItemButton onClick={() => {
           setShowAboutPage(true)
         }}>
           <Mui.ListItemIcon><icons.Info /></Mui.ListItemIcon>
-          <Mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.2.0(2)" />
+          <Mui.ListItemText primary="About" secondary="CyberWaifu-v2 1.3.0 (3)" />
         </Mui.ListItemButton>
       </Mui.List>
     </Mui.Box>

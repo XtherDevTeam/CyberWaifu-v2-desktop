@@ -24,7 +24,6 @@ function useCookie() {
                         name: current.split('=')[0],
                         value: current.split('=')[1],
                         path: '/',
-                        secure: true,
                         httpOnly: false,
                         sameSite: 'no_restriction',
                     });

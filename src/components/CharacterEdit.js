@@ -9,6 +9,7 @@ import StickerSetSelector from './StickerSetSelector';
 import TTSServiceSelector from './TTSServiceSelector';
 import TTSModelSelector from './TTSModelSelector';
 import fs from '../shared/fs'
+import THA4ServiceSelector from './THA4ServiceSelector';
 
 function CharacterEdit({ id, charNameInit }) {
   const [charInfo, setCharInfo] = React.useState({})
@@ -26,6 +27,7 @@ function CharacterEdit({ id, charNameInit }) {
   const [useStickerSet, setUseStickerSet] = React.useState(null)
   const [useTTSModel, setUseTTSModel] = React.useState("None")
   const [initialized, setInitialized] = React.useState(false)
+  const [tha4Service, setTHA4Service] = React.useState(null)
 
 
   let refreshCharInfo = () => {
@@ -36,6 +38,11 @@ function CharacterEdit({ id, charNameInit }) {
         setCharPrompt(r.data.data.charPrompt)
         setPastMemories(r.data.data.pastMemories)
         setExampleChats(r.data.data.exampleChats)
+        Remote.getTHA4ServiceInfo(r.data.data.tha4Service).then(r => {
+          if (r.status) {
+            setTHA4Service(r.data)
+          }
+        })
         Remote.getStickerSetInfo(r.data.data.emotionPack).then(r => {
           if (r.status) {
             setUseStickerSet(r.data.data)
@@ -67,8 +74,8 @@ function CharacterEdit({ id, charNameInit }) {
     refreshCharInfo()
   }, [id, charName])
 
-  let submitChange = (charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel) => {
-    Remote.editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel).then(r => {
+  let submitChange = (charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel, tha4Service) => {
+    Remote.editCharacter(id, charName, charPrompt, pastMemories, exampleChats, useStickerSet, useTTSModel, tha4Service).then(r => {
       if (r.status) {
         setMessageTitle('Success')
         setMessageContent('Character information updated successfully')
@@ -129,7 +136,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={charName}
           onOk={(v) => {
             setCharName(v)
-            submitChange(v, charPrompt, pastMemories, exampleChats, useStickerSet.id, useTTSModel)
+            submitChange(v, charPrompt, pastMemories, exampleChats, useStickerSet.id, useTTSModel, tha4Service.id)
           }}
         />
         <ContentEditDialog
@@ -139,7 +146,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={charPrompt}
           onOk={(v) => {
             setCharPrompt(v)
-            submitChange(charName, v, pastMemories, exampleChats, useStickerSet.id, useTTSModel)
+            submitChange(charName, v, pastMemories, exampleChats, useStickerSet.id, useTTSModel, tha4Service.id)
           }}
         />
         <ContentEditDialog
@@ -149,7 +156,7 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={pastMemories}
           onOk={(v) => {
             setPastMemories(v)
-            submitChange(charName, charPrompt, v, exampleChats, useStickerSet.id, useTTSModel)
+            submitChange(charName, charPrompt, v, exampleChats, useStickerSet.id, useTTSModel, tha4Service.id)
           }}
         />
         <ContentEditDialog
@@ -159,11 +166,11 @@ function CharacterEdit({ id, charNameInit }) {
           defaultValue={exampleChats}
           onOk={(v) => {
             setExampleChats(v)
-            submitChange(charName, charPrompt, pastMemories, v, useStickerSet.id, useTTSModel)
+            submitChange(charName, charPrompt, pastMemories, v, useStickerSet.id, useTTSModel, tha4Service.id)
           }}
         />
         <TTSModelSelector
-          onChange={(v) => { setUseTTSModel(v); submitChange(charName, charPrompt, pastMemories, exampleChats, useStickerSet.id, v) }}
+          onChange={(v) => { setUseTTSModel(v); submitChange(charName, charPrompt, pastMemories, exampleChats, useStickerSet.id, v, tha4Service.id) }}
           defaultValue={useTTSModel}
           onErr={(e) => {
             setMessageType('error')
@@ -172,8 +179,18 @@ function CharacterEdit({ id, charNameInit }) {
             setMessageOpen(true)
           }}
         />
+        <THA4ServiceSelector
+          onChange={(v) => { setTHA4Service(v); submitChange(charName, charPrompt, pastMemories, exampleChats, useStickerSet.id, useTTSModel, v.id) }}
+          defaultValue={tha4Service}
+          onErr={(e) => {
+            setMessageType('error')
+            setMessageTitle('Error')
+            setMessageContent(e)
+            setMessageOpen(true)
+          }}
+        />
         <StickerSetSelector
-          onChange={(v) => { setUseStickerSet(v); submitChange(charName, charPrompt, pastMemories, exampleChats, v.id, useTTSModel) }}
+          onChange={(v) => { setUseStickerSet(v); submitChange(charName, charPrompt, pastMemories, exampleChats, v.id, useTTSModel, tha4Service.id) }}
           defaultValue={useStickerSet}
           onErr={(e) => {
             setMessageType('error')
