@@ -194,7 +194,8 @@ function ChatroomView({ id, charName }) {
   }, [chatFilesView])
 
 
-  function receiveMessage(response, order = false) {
+  let receiveMessage = React.useCallback((response, order = false) => {
+    setPendingMsgChain([])
     setIsReceivingMessage(false)
     if (order) {
       console.log('reversed order')
@@ -209,43 +210,9 @@ function ChatroomView({ id, charName }) {
       }
     } else {
       // Filter out temporary messages from the chat history
-      const filteredHistory = chatHistoryView.filter(message => !message.role.endsWith('_temporary'));
-
-      // Create a queue to maintain order of messages
-      const messageQueue = []
-      let firstFlag = true
-
-      // Process each response and add it to the queue with calculated delay
-      response.forEach(resp => {
-        let delay = 0
-        if (resp.role === 'model' && resp.type === 0) {
-          if (firstFlag) {
-            firstFlag = false
-          } else {
-            delay = resp.text.length * 10 // Calculate delay based on text length
-            console.log('first message', delay)
-          }
-        }
-
-        messageQueue.push({ message: resp, delay })
-      });
-
-      function timeout(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
-      }
-
-      // Process each message in the queue
-      (async () => {
-        for (let i = 0; i < messageQueue.length; i++) {
-          const { message, delay } = messageQueue[i]
-          console.log('Processing message', message, 'with delay', delay)
-          await timeout(delay)
-          filteredHistory.push(message)
-          setChatHistoryView([...filteredHistory])
-        }
-      })()
+      setChatHistoryView(prevState => [...prevState.filter(k => k.role !== 'user_temporary'), ...response])
     }
-  }
+  }, [chatHistoryView, isInitializing])
 
   function clearTemporaryMessage() {
     let a = []
@@ -318,6 +285,7 @@ function ChatroomView({ id, charName }) {
           chatSession.current = r.data.data.session
           chatRoomObject.current = new RoomObject(chatSession.current, Remote.serverUrl, msgChain)
           chatRoomObject.current.on('message', (list_of_msg) => {
+            console.log('triggered message recv ', list_of_msg)
             receiveMessage(list_of_msg)
           })
           chatRoomObject.current.on('error', (error_msg) => {
@@ -329,7 +297,6 @@ function ChatroomView({ id, charName }) {
           })
           chatRoomObject.current.connect()
         }
-        setPendingMsgChain([])
       })
     } else {
       setIsReceivingMessage(true)
@@ -359,11 +326,11 @@ function ChatroomView({ id, charName }) {
     }
   }
 
-  function resetPendingMsgTimer() {
+  let resetPendingMsgTimer = React.useCallback(() => {
     if (pendingMsgChain.length === 0) {
       return
     }
-    let f = () => sendMessageChain(pendingMsgChain)
+    
     if (pendingSendTimer !== null) {
       console.log('not null, clearing timeout', pendingSendTimer)
       clearTimeout(pendingSendTimer)
@@ -381,8 +348,8 @@ function ChatroomView({ id, charName }) {
     // }
     // if menu is open, user probably wants to send emotion stickers, so postpone sending message
     console.log('random timeout', Math.floor((Math.random() * 1000) % 4000 + 1000))
-    setPendingSendTimer(setTimeout(f, Math.floor((Math.random() * 1000) % 4000 + 1000)))
-  }
+    setPendingSendTimer(setTimeout(() => sendMessageChain(pendingMsgChain), Math.floor((Math.random() * 1000) % 4000 + 1000)))
+  }, [pendingMsgChain])
 
   function updateCursurPosition() {
     let CaretPos = getCursorPosition(chatMessageInputRef.current)

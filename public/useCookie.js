@@ -34,23 +34,6 @@ function useCookie() {
     });
 }
 
-function useCORS() {
-    app.whenReady().then(() => {
-        const filter = { urls: ['https://*/*', 'http://*/*'] };
-        session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
-            if (details.requestHeaders && details.requestHeaders['Origin']) {
-                const filter = { urls: ['https://*/*', 'http://*/*'] };
-                session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-                    console.log('received mtherfker')
-                    details.requestHeaders['Origin'] = null;
-                    callback({ requestHeaders: details.requestHeaders })
-                });
-            }
-        });
-    })
-}
-
 module.exports = {
-    useCookie,
-    useCORS
+    useCookie
 };

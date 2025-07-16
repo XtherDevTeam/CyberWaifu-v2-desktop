@@ -4,10 +4,9 @@ const url = require('url')
 
 // ipcMain
 const { ipcMain } = require('electron')
-const { useCookie, useCORS } = require('./useCookie')
+const { useCookie } = require('./useCookie')
 
 useCookie()
-useCORS()
 
 // keep the window object global reference to prevent it from being garbage collected when the JavaScript object is released.
 let mainWindow
@@ -24,6 +23,20 @@ function createWindow() {
   if (process.platform !== 'darwin') {
     mainWindow.setMenu(null)
   }
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    },
+  );
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
 
   /* 
    * 加载应用-----  electron-quick-start中默认的加载入口
@@ -61,6 +74,21 @@ function createVoiceChatWindow(charName) {
   if (process.platform !== 'darwin') {
     voiceChatWindow.setMenu(null)
   }
+
+  voiceChatWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    },
+  );
+
+  voiceChatWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
 
   /* 
    * 加载应用-----  electron-quick-start中默认的加载入口

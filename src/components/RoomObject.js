@@ -15,6 +15,7 @@ class RoomObject {
     }
     this.socket.on('connect', () => {
       console.log('Connected to server')
+      this.socket.sendBuffer = []
       if (!this.connected) {
         this.socket.emit('initialize', {
           sessionName: this.token,
@@ -23,10 +24,6 @@ class RoomObject {
         console.log(`Sent initialize message with token ${this.token} and begin message ${beginMsg}`)
       }
       this.connected = true
-    })
-    this.socket.on('disconnect', () => {
-      console.log('Disconnected from server')
-      this.connected = false
     })
     this.socket.on('message', (data) => {
       this.events['message'].forEach(callback => callback(data))
