@@ -84,6 +84,7 @@ function VoiceChat() {
         setMessageOpen(true)
       })*/
       //  window.close()
+
     }
   }, [connect])
 
@@ -93,19 +94,22 @@ function VoiceChat() {
       publishDefaults: {
         red: false,
       },
+      videoCaptureDefaults:
+      {
+        resolution: {
+          width: 1280,
+          height: 720,
+          frameRate: 10,
+        }
+      },
+      disconnectOnPageLeave: true,
     }} serverUrl={`wss://${remoteUrl}`} token={accessToken} connect={connect}
       onDisconnected={() => {
         console.log('disconnected')
         setConnect(false)
       }}
       audio={true}
-      video={{
-        resolution: {
-          width: 1280,
-          height: 720,
-          frameRate: 10,
-        },
-      }}
+      video={false}
     >
       <VideoConference></VideoConference>
     </LiveKitRoom>

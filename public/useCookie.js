@@ -36,14 +36,17 @@ function useCookie() {
 
 function useCORS() {
     app.whenReady().then(() => {
-        if (details.requestHeaders && details.requestHeaders['Origin']) {
-            const filter = { urls: ['https://*/*'] };
-            session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-                console.log('received mtherfker')
-                details.requestHeaders['Origin'] = null;
-                callback({ requestHeaders: details.requestHeaders })
-            });
-        }
+        const filter = { urls: ['https://*/*', 'http://*/*'] };
+        session.defaultSession.webRequest.onHeadersReceived(filter, (details, callback) => {
+            if (details.requestHeaders && details.requestHeaders['Origin']) {
+                const filter = { urls: ['https://*/*', 'http://*/*'] };
+                session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
+                    console.log('received mtherfker')
+                    details.requestHeaders['Origin'] = null;
+                    callback({ requestHeaders: details.requestHeaders })
+                });
+            }
+        });
     })
 }
 
