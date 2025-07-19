@@ -256,11 +256,13 @@ function ChatroomView({ id, charName }) {
     return (async () => {
       for (let i in chatFiles.current) {
         console.log(i)
-        let r = await fs.uploadAsync(chatFiles.current[i].type.startsWith('image/') ? Remote.attachmentUploadImage() : Remote.attachmentUploadAudio(), chatFiles.current[i])
+        let isImage = chatFiles.current[i].type.startsWith('image/')
+        let r = await fs.uploadAsync( isImage ? Remote.attachmentUploadImage() : Remote.attachmentUploadAudio(), chatFiles.current[i])
         if (r.status == 200) {
           let data = await r.json()
           if (data.status) {
-            chatFiles.current[i] = data.id
+            chatFiles.current[i] = isImage ? `image:${data.id}` : `audio:${data.id}`
+            console.log('uploaded', chatFiles.current[i])
           } else {
             throw data.data
           }
@@ -313,7 +315,7 @@ function ChatroomView({ id, charName }) {
     if (text.length !== 0) {
       msgChain.push(text)
     }
-    images.map(v => { msgChain.push('image:' + v) })
+    images.forEach(v => { msgChain.push(v) })
     clearChatImages()
     setChatMessageInput('')
     setPendingMsgChain(msgChain)
